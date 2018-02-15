@@ -3,7 +3,8 @@ This is the new SerBot that is currently running. I decided to share the source 
 
 If you want SerBot in your Discord Server just use this link: https://discordapp.com/oauth2/authorize?&client_id=213516317003612180&scope=bot&permissions=16392
 
-#Setting up SerBot
+# Setting up SerBot
+
 due to SerBot.json file containing bot tokens and such, I decided to remove it entirely from github so to make the source code public.
 here is a basic format of it:
 ```json
