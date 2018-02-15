@@ -20,4 +20,16 @@ here is a basic format of it:
 
 In the future I will try to make the Webhook value optional, so people can host SerBot without the need for a webhook logging channel (it was there to keep me informed of stuff)
 
+# Dependencies
 
+There is a few Dependencies that are used by SerBot.
+
+- [discordjs/discord.js](https://github.com/discordjs/discord.js) This is the API that is used by SerBot to communicate with users on Discord.
+- [eslachance/enmap](https://github.com/eslachance/enmap) This and enmap-level are not used currently. They will be used in the future to store player statistics history.
+- [eslachance/enmap-level](https://github.com/eslachance/enmap-level) Same as above, not used currently.
+- [jprichardson/node-fs-extra (fs-extra)](https://github.com/jprichardson/node-fs-extra) This is used alongside with Node-gyp, zip-dir and Sharp to provide Keyart Generation service.
+- [nodejs/node-gyp](https://github.com/nodejs/node-gyp) This is used alongside with fs-extra, zip-dir and Sharp to provide Keyart Generation service.
+- [request/request](https://github.com/request/request) This is used for WG API checks, retrive RSS data and Image data for Keyart Generation.
+- [bobby-brennan/rss-parser](https://github.com/bobby-brennan/rss-parser) This is used to parse RSS data which is used for SerBot Update news.
+- [lovell/sharp](https://github.com/lovell/sharp) This is used alongside with fs-extra, zip-dir and node-gyp to provide Keyart Generation service.
+- [jsantell/node-zip-dir (zip-dir)](https://github.com/jsantell/node-zip-dir) This is used alongside with fs-extra, sharp and node-gyp to provide Keyart Generation service.
