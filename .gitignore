@@ -1,0 +1,11 @@
+node_modules/
+.idea/
+package-lock.json
+TankArray.json
+BlitzStars.json
+test.js
+keyart_gen/temp/*
+test.
+crashlog.json
+data/
+SerBot.json
