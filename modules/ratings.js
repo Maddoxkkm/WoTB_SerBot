@@ -90,8 +90,8 @@ exports.wn8 = function(playerdata){
             total.rDef.acc += x.battles * x.def;
             total.rDef.exp += x.battles * wn8Table[x.tank_id].def;
             //rWin accumulation
-            total.rWin.acc += x.battles * x.wr / 100;
-            total.rWin.exp += x.battles * wn8Table[x.tank_id].wr / 100;
+            total.rWin.acc += x.battles * (x.wr / 100);
+            total.rWin.exp += x.battles * (wn8Table[x.tank_id].wr / 100);
         }
         return total
     }, {rDamage:{acc: 0, exp: 0}, rSpot:{acc: 0, exp: 0}, rFrag:{acc: 0, exp: 0}, rDef:{acc: 0, exp: 0}, rWin:{acc: 0, exp: 0}});

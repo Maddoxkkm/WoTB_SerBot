@@ -40,6 +40,26 @@ SerBot.on("disconnected", function(){
     process.exit();
 });
 
+
+//Get WN8 data
+function getWN8(){
+    request.Request(`https://www.blitzstars.com/tankaverages.json`)
+        .then(body => {
+            let list = JSON.parse(body);
+            let result = {};
+            list.map(x => {
+                result[x.tank_id] = {
+                    wr: x.all.wins * 100 / x.all.battles,
+                    dmg: x.all.damage_dealt / x.all.battles,
+                    spot: x.all.spotted / x.all.battles,
+                    frag: x.all.frags/ x.all.battles,
+                    def: x.all.dropped_capture_points / x.all.battles};
+            });
+            fs.writeFileSync('BlitzStars.json', JSON.stringify(result, null, 2));
+            //let TankArray = require('./BlitzStars.json')
+            SerbLog('Average Tank Data Ready!');
+        },function(){SerbLog('Average Tank Data Update failed!')});
+}
 //Set Status + Tank Array Module + Updating it
 function SetStatus () {
     const firsthalf = [
@@ -78,22 +98,7 @@ SerBot.on("ready", () => {
             //let TankArray = require('./TankArray.json')
             SerbLog('Tank Information Ready!');
         },() => {SerbLog('Tank Information Preparation failed!')});
-    request.Request(`https://www.blitzstars.com/tankaverages.json`)
-        .then(body => {
-            let list = JSON.parse(body);
-            let result = {};
-            list.map(x => {
-                result[x.tank_id] = {
-                    wr: x.percentiles.winRate[4],
-                    dmg: x.percentiles.damagePerBattle[4],
-                    spot: x.percentiles.spotsPerBattle[4],
-                    frag: x.percentiles.killsPerBattle[4],
-                    def: x.all.dropped_capture_points / x.all.battles};
-            });
-            fs.writeFileSync('BlitzStars.json', JSON.stringify(result, null, 2));
-            //let TankArray = require('./BlitzStars.json')
-            SerbLog('Average Tank Data Ready!');
-        },function(){SerbLog('Average Tank Data Preparation failed!')});
+    getWN8();
 });
 SerBot.setInterval(() => {
     SerbLog(`Serving in ${SerBot.channels.size} channels, ${SerBot.guilds.size} servers and ${SerBot.users.filter(x => !x.bot).size} users`);
@@ -106,22 +111,7 @@ SerBot.setInterval(() => {
             //let TankArray = require('./TankArray.json')
             SerbLog('Tank Information Updated!');
         },() => {SerbLog('Tank Information Update Failed!')});
-    request.Request(`https://www.blitzstars.com/tankaverages.json`)
-        .then(body => {
-            let list = JSON.parse(body);
-            let result = {};
-            list.map(x => {
-                result[x.tank_id] = {
-                    wr: x.percentiles.winRate[4],
-                    dmg: x.percentiles.damagePerBattle[4],
-                    spot: x.percentiles.spotsPerBattle[4],
-                    frag: x.percentiles.killsPerBattle[4],
-                    def: x.all.dropped_capture_points / x.all.battles};
-            });
-            fs.writeFileSync('BlitzStars.json', JSON.stringify(result, null, 2));
-            //let TankArray = require('./BlitzStars.json')
-            SerbLog('Average Tank Data Updated!');
-        },() => {SerbLog('Average Tank Data Update Failed!')});
+    getWN8();
 }, 864000000);
 
 //Help Function module
