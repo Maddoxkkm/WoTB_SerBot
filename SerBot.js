@@ -40,7 +40,6 @@ SerBot.on("disconnected", function(){
     process.exit();
 });
 
-
 //Get WN8 data
 function getWN8(){
     request.Request(`https://www.blitzstars.com/tankaverages.json`)
@@ -56,10 +55,10 @@ function getWN8(){
                     def: x.all.dropped_capture_points / x.all.battles};
             });
             fs.writeFileSync('BlitzStars.json', JSON.stringify(result, null, 2));
-            //let TankArray = require('./BlitzStars.json')
-            SerbLog('Average Tank Data Ready!');
+            SerbLog('Average Tank Data Updated!');
         },function(){SerbLog('Average Tank Data Update failed!')});
 }
+
 //Set Status + Tank Array Module + Updating it
 function SetStatus () {
     const firsthalf = [
@@ -89,15 +88,20 @@ function SetStatus () {
             .then(SerbLog(`Status Set: ${status}`));
     }
 }
-SerBot.on("ready", () => {
-    SerbLog(`Ready to begin! Serving in ${SerBot.channels.size} channels, ${SerBot.guilds.size} servers and ${SerBot.users.filter(x => !x.bot).size} users`);
-    SetStatus();
+
+//grab Tankopedia
+function Tankopedia(){
     request.Request(`http://api.wotblitz.asia/wotb/encyclopedia/vehicles/?application_id=${SerBotTokens.Api_Token}&fields=tier%2Cname`)
         .then(body => {
             fs.writeFileSync('TankArray.json', body);
-            //let TankArray = require('./TankArray.json')
-            SerbLog('Tank Information Ready!');
-        },() => {SerbLog('Tank Information Preparation failed!')});
+            SerbLog('Tank Information Updated!');
+        },() => {SerbLog('Tank Information Update failed!')});
+}
+
+SerBot.on("ready", () => {
+    SerbLog(`Ready to begin! Serving in ${SerBot.channels.size} channels, ${SerBot.guilds.size} servers and ${SerBot.users.filter(x => !x.bot).size} users`);
+    SetStatus();
+    Tankopedia();
     getWN8();
 });
 SerBot.setInterval(() => {
@@ -105,12 +109,7 @@ SerBot.setInterval(() => {
     SetStatus();
 }, 900000);
 SerBot.setInterval(() => {
-    request.Request(`https://api.wotblitz.asia/wotb/encyclopedia/vehicles/?application_id=${SerBotTokens.Api_Token}&fields=tier%2Cname`)
-        .then(body => {
-            fs.writeFileSync('TankArray.json', body);
-            //let TankArray = require('./TankArray.json')
-            SerbLog('Tank Information Updated!');
-        },() => {SerbLog('Tank Information Update Failed!')});
+    Tankopedia();
     getWN8();
 }, 864000000);
 
@@ -181,7 +180,7 @@ function errorReply(errorDetails, message,command){
     })
         .then(SerbLog(`The User ${message.author.username} From ${message.guild} at ${message.channel.name} has attempted to ${command.action} but failed due to ${errorDetails.console_reason}. Request String: ${message.content}`),
             (error) => {message.channel.send(`\`\`\`${errorDetails.catagory}\n${errorDetails.reason}\n\nCommand Usage for: ${prefix + command.example}\n${command.usage}\n\nNote: Please Enable >Embed Links< Permission for SerBot for Better-Looking Embed Reply!\`\`\``);
-            SerbLog(`${error}: Embed Not Enabled!`)})
+            SerbLog(`${error}: Embed Not Enabled!`)});
     message.channel.stopTyping(true)
 }
 
@@ -540,16 +539,12 @@ SerBot.on("message", async function(message) {
             //commands
             let membersCommand = false;
             let debug = false;
-            let leongCustom = false;
             if (stringCommand.command !== undefined) {
                 if (stringCommand.command.search(`${commandInvoke}member`) !== -1 || stringCommand.command.search(`${commandInvoke}members`) !== -1 || stringCommand.command.search(`${commandInvoke}m`) !== -1) {
                     membersCommand = true;
                 }
                 if (stringCommand.command.search(`${commandInvoke}debug`) !== -1 || stringCommand.command.search(`${commandInvoke}d`) !== -1) {
                     debug = true;
-                }
-                if ((stringCommand.command.search(`${commandInvoke}serbby`) !== -1) && (message.member.roles.find("name", "SerBCustom"))) {
-                    leongCustom = true;
                 }
             }
 
