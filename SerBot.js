@@ -198,7 +198,7 @@ function commandAliasCheck(input, commandArray){
 
 function afterTypingCheck(channel){
     setTimeout(()=>{
-        if(SerBot.typingDurationIn(channel) > 9000){
+        if(SerBot.user.typingDurationIn(channel) > 9000){
             channel.stopTyping(true)
         }
     },9000)
