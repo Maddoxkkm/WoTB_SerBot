@@ -181,7 +181,8 @@ function errorReply(errorDetails, message,command){
         .then(SerbLog(`The User ${message.author.username} From ${message.guild} at ${message.channel.name} has attempted to ${command.action} but failed due to ${errorDetails.console_reason}. Request String: ${message.content}`),
             (error) => {message.channel.send(`\`\`\`${errorDetails.catagory}\n${errorDetails.reason}\n\nCommand Usage for: ${prefix + command.example}\n${command.usage}\n\nNote: Please Enable >Embed Links< Permission for SerBot for Better-Looking Embed Reply!\`\`\``);
             SerbLog(`${error}: Embed Not Enabled!`)});
-    message.channel.stopTyping(true)
+    message.channel.stopTyping();
+    afterTypingCheck(message.channel);
 }
 
 function commandAliasCheck(input, commandArray){
@@ -193,6 +194,14 @@ function commandAliasCheck(input, commandArray){
         }
     });
     return equal
+}
+
+function afterTypingCheck(channel){
+    setTimeout(()=>{
+        if(SerBot.typingDurationIn(channel) > 9000){
+            channel.stopTyping(true)
+        }
+    },9000)
 }
 
 //Time to Days, Hours, Minutes and Seconds
@@ -298,7 +307,8 @@ SerBot.on("message", async function(message) {
                     }
                 }
             });
-            message.channel.stopTyping(true);
+            message.channel.stopTyping();
+            afterTypingCheck(message.channel);
             SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} Requested SerBot Update News.`);
         }
         catch (error){
@@ -384,7 +394,8 @@ SerBot.on("message", async function(message) {
                 });
             SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} generated keyart. Full URL: ${keyartUrl}`);
             await fs.remove(`keyart_gen/temp/${message.id}`);
-            message.channel.stopTyping(true);
+            message.channel.stopTyping();
+            afterTypingCheck(message.channel);
         } catch (error) {
             if (error.sus === undefined) {
                 SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} used the keyart generation Module but failed. Full String: ${message.content} Error: ${error}`);
@@ -503,8 +514,9 @@ SerBot.on("message", async function(message) {
                             footer: {icon_url: SerBot.user.avatarURL, text: 'Provided by the Forever Loyal SerBot™'}
                         }
                     });
-                    message.channel.stopTyping(true)
                 });
+            message.channel.stopTyping();
+            afterTypingCheck(message.channel);
         } catch (err) {
             errorReply(SerBotDetails.ErrorArray.Unexpected_Error, message, SerBotDetails.CommandArray.SPArray);
             message.channel.send(``, {
@@ -513,7 +525,8 @@ SerBot.on("message", async function(message) {
                     color: 16711680
                 }
             });
-            message.channel.stopTyping(true)
+            message.channel.stopTyping();
+            afterTypingCheck(message.channel);
         }
     }
 
@@ -756,7 +769,8 @@ SerBot.on("message", async function(message) {
                 })
             }
 
-            message.channel.stopTyping(true)
+            message.channel.stopTyping();
+            afterTypingCheck(message.channel);
         } catch (error) {
             if (error.response !== undefined) {
                 errorReply(error.error, message, SerBotDetails.CommandArray.CSArray);
@@ -1040,7 +1054,8 @@ SerBot.on("message", async function(message) {
                     }
                 })
             }
-            message.channel.stopTyping(true)
+            message.channel.stopTyping();
+            afterTypingCheck(message.channel);
         }
         catch (error) {
             if (error.response !== undefined){
