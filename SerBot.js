@@ -252,6 +252,15 @@ function ConvertTime(ms){
 SerBot.on("message", async function(message) {
     let fullInput = message.content.split(" ");
 
+    //Forever typing diagnostic code
+    if(message.content.toUpperCase().startsWith(prefix.toUpperCase() + "ISTYPING")){
+        message.channel.send(`Typing in this channel: ${SerBot.user.typingIn(message.channel)}`);
+    }
+    if(message.content.toUpperCase().startsWith(prefix.toUpperCase() + "STOPTYPING")){
+        message.channel.stopTyping(true);
+    }
+    //end of diagnostic code
+
     //command to restart bot with help of PM2: '!bot logoff'
     if (message.content.toUpperCase().startsWith(prefix.toUpperCase() + "BOT LOGOFF") && (message.author.id === SerBotTokens.Owner_ID)) {
         SerbLog("Disconnecting....");
