@@ -65,7 +65,7 @@ function SetStatus () {
         `Nerfing Germans`,
         `Mining Stalinium™`,
         `${prefix.toLowerCase()+SerBotDetails.CommandArray.HelpArray.command[0].toLowerCase()}`,
-        `"Balnacing"™`,
+        `"Balancing"™`,
         `Improving Russian Bias™`,
         `${prefix.toLowerCase()+SerBotDetails.CommandArray.HelpArray.command[0].toLowerCase()}`,
         `Breaking RNG`,
