@@ -276,7 +276,8 @@ SerBot.on("message", async function(message) {
                     {name:`WN8 Tank Average Values provider`, value:`[BlitzStars](https://www.blitzstars.com/)`, inline: true},
                     {name:`MGR 2.2 Tank Values provider`, value:`[Wblitz.net](http://wblitz.net/mgr/coeffs)`, inline: true},
                     {name:`No. of Servers`, value:`${SerBot.guilds.size} Servers`, inline: true},
-                    {name:`No. of Users (Excluding Bots)`, value:`${SerBot.users.filter(x => !x.bot).size} Users`, inline: true}
+                    {name:`No. of Users (Excluding Bots)`, value:`${SerBot.users.filter(x => !x.bot).size} Users`, inline: true},
+                    {name:`To Support Maddox via Patreon`, value: `https://www.patreon.com/maddoxkkm`, inline: true}
                 ],
                 footer: {icon_url: SerBot.user.avatarURL, text: 'Maintaned by forever unreliable and Lazy™ Maddox.'}
             }
@@ -480,7 +481,7 @@ SerBot.on("message", async function(message) {
                     icon_url: SerBot.user.avatarURL
                 },
                 title: `${SerBot.user.username}'s Help File`,
-                description: `Help file of ${SerBot.user.username} - Commands and Stuff. If you have any enquiries please enter [MadWoTBMods](https://discord.gg/gt7PquG) Server and ask the creator of SerBot <@76584929063866368> for help.`,
+                description: `Help file of ${SerBot.user.username} - Commands and Stuff. If you have any enquiries please enter [MadWoTBMods](https://discord.gg/gt7PquG) Server and ask the creator of SerBot <@76584929063866368> (Maddox#0438) for help. \nIf you wish to support the operations of this bot (the hosting fees of this bot is all from Maddox's pocket), be a patreon today! (https://www.patreon.com/maddoxkkm)`,
                 fields: helpCommandArray
             }
         })
