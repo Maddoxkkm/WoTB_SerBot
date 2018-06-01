@@ -3,6 +3,8 @@ const SerBotTokens = require('./SerBot.json');
 const prefix = SerBotTokens.prefix;
 const commandInvoke = SerBotTokens.commandInvoke;
 
+const guildSettingsData = require('./modules/guildSettingsData.js');
+
 //Import Discord Module
 const Discord = require("discord.js");
 const SerBot = new Discord.Client({
@@ -72,7 +74,8 @@ function SetStatus () {
         `How Terrible`,
         `${prefix.toLowerCase()+SerBotDetails.CommandArray.HelpArray.command[0].toLowerCase()}`,
         `Powered by Vodka`,
-        `"Insufficient Loyalty"™`
+        `"Insufficient Loyalty"™`,
+        `Supporting Replays`
 
     ];
     const secondhalf = [
@@ -991,7 +994,9 @@ SerBot.on("message", async function(message) {
                         {name: 'Maximum Experience', value: `**${psdata.playerfinal.max_xp} on ${psdata.playerfinal.max_xp_tank}**`, inline: true},
                         {name: 'Average Experience', value: `**${psdata.playerfinal.avgexp.toFixed(2)}**`, inline: true},
                         {name: 'Cap Per battle', value: `**${psdata.playerfinal.cap.toFixed(2)}**`, inline: true},
-                        {name: 'Defend Per Battle', value: `**${psdata.playerfinal.defend.toFixed(2)}**`, inline: true}],
+                        {name: 'Defend Per Battle', value: `**${psdata.playerfinal.defend.toFixed(2)}**`, inline: true},
+                        {name: 'Replays of this player', value: `[Link to this player's replays on WOTInspector.com](http://wotinspector.com/en/replays/sort/ut/?pl=${psdata.acc_id}#filters)`, inline: true}
+                    ],
                     timestamp: new Date(psdata.playerfinal.last_battle_time),
                     footer: {icon_url: SerBot.user.avatarURL, text: 'Detailed Time last played'}}
             });
@@ -1079,3 +1084,4 @@ SerBot.on('error', error => {
 });
 
 SerBot.login(SerBotTokens.Token).then(console.log(`Login Successful! Initializing`));
+exports = SerBot;

@@ -8,3 +8,8 @@ test.
 crashlog.json
 data/
 SerBot.json
+battle_results.proto
+data.wotreplay
+depickle.py
+test.size
+
