@@ -2,8 +2,8 @@
   "name": "SerBot",
   "version": "1.0.0",
   "dependencies": {
-    "discord.js": "^11.3.0",
-    "enmap": "^2.6.0",
+    "discord.js": "^11.3.2",
+    "enmap": "^2.6.1",
     "enmap-sqlite": "^2.0.1",
     "fs-extra": "^5.0.0",
     "node-gyp": "^3.6.2",

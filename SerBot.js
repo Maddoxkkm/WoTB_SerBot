@@ -49,6 +49,11 @@ SerBot.on("disconnected", function(){
     process.exit();
 });
 
+//check for member permission
+function hasPermission(permission, messageObj){
+    return messageObj.member.hasPermission(permission,false,true,true)
+}
+
 //Get WN8 data
 function getWN8(){
     request.Request(`https://www.blitzstars.com/tankaverages.json`)
@@ -1094,13 +1099,13 @@ SerBot.on("message", async function(message) {
     //replays
     if (commandAliasCheck(fullInput,SerBotDetails.CommandArray.ReplaysArray)){
         try{
-
-            //
-            if(fullInput[1] !== undefined && message.member.hasPermission("MANAGE_GUILD",false,true,true)){
+            // for watching the replays.
+            if(fullInput[1] !== undefined){
                 switch(fullInput[1].toLowerCase()){
                     case "add":
                     case "add-channel":
                     case "addchannel":
+                        if (!hasPermission("MANAGE_GUILD",message)){throw SerBotDetails.ErrorArray.Insufficient_Permission_Server}
                         if (await replay.addAutoChannel(message.guild.id, message.channel.id)){
                             message.channel.send('',{
                                 embed: {
@@ -1121,6 +1126,7 @@ SerBot.on("message", async function(message) {
                     case "remove":
                     case "remove-channel":
                     case "removechannel":
+                        if (!hasPermission("MANAGE_GUILD",message)){throw SerBotDetails.ErrorArray.Insufficient_Permission_Server}
                         if (await replay.removeAutoChannel(message.guild.id, message.channel.id)){
                             message.channel.send('',{
                                 embed: {
@@ -1168,7 +1174,7 @@ SerBot.on("message", async function(message) {
             const reply = await replay.uploadReplay(SerBot.user.avatarURL,replayURL,title);
             message.channel.send(reply.content, reply);
             SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} Uploaded Replays.`);
-            message.channel.stopTyping(true);
+            message.channel.stopTyping();
         } catch (error){
             if (error.response !== undefined){
                 errorReply(error.error, message, SerBotDetails.CommandArray.ReplaysArray);

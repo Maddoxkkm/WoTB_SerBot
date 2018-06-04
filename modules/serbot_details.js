@@ -100,6 +100,12 @@ module.exports = {
         }
     },
     "ErrorArray":{
+        "Insufficient_Permission_Server":{
+            "sus": "error",
+            "catagory": "You do not have the required Permission to use this command!",
+            "reason": "You do not have `Manage Server` Permission to use this command!, please make sure you have the correct permissions before using this command!",
+            "console_reason": "no permission"
+        },
         "Missing_Attachment":{
             "sus": "error",
             "catagory": "Keyart Generation Missing Image or URL as Attachment!",
