@@ -9,6 +9,9 @@ const autoUploadChannels = new Enmap({ provider: new EnmapSQLite({ name: 'GuildS
 //load request for uploading
 const request = require('./request.js');
 
+//other utils
+const util = require('./util.js');
+
 async function addAutoChannel(guildID, channelID){
     try{
         await autoUploadChannels.defer;
@@ -100,6 +103,15 @@ function uploadReplay(SerBot, url, title = undefined){
 
                 const summaryObj = response.data.summary;
 
+                if(summaryObj.details === null){
+                    resolve({
+                        embed:{
+                            color: 16711680,
+                            description: "No Battle results found! Please make sure you have stayed for the entire game so the battle results are also within the replay!"
+                        }
+                    })
+                }
+
                 //BattleType
                 let gamemode;
                 switch (summaryObj.battle_type){
@@ -151,7 +163,7 @@ function uploadReplay(SerBot, url, title = undefined){
                     achievementArray.push(masteryData.class);
                 }
 
-                const epicMedalsArray = summaryObj.achievements.reduce((totalArray, curAcheieve) => {
+                const epicMedalsArray = summaryObj.details.achievements.reduce((totalArray, curAcheieve) => {
                     if (medalList[curAcheieve.t] !== undefined) {
                         totalArray.push(medalList[curAcheieve.t]);
                     }
@@ -179,12 +191,12 @@ function uploadReplay(SerBot, url, title = undefined){
                     case 0:
                         roomType = 'Standard Battle';
                         pointsfieldName = 'Capture Points Earned / Dropped';
-                        pointsfieldValue = `${summaryObj.capture_points} / ${summaryObj.capture_points_dropped}`;
+                        pointsfieldValue = `${summaryObj.details.capture_points} / ${summaryObj.details.capture_points_dropped}`;
                         break;
                     case 1:
                         roomType = 'Supremacy Battle';
                         pointsfieldName = 'Victory Points Earned / Stolen';
-                        pointsfieldValue = `${summaryObj.wp_points_earned} / ${summaryObj.wp_points_stolen}`;
+                        pointsfieldValue = `${summaryObj.details.wp_points_earned} / ${summaryObj.details.wp_points_stolen}`;
                         break;
                 }
 
@@ -211,24 +223,24 @@ function uploadReplay(SerBot, url, title = undefined){
                             },
                             description: `Details of Battle Statistics - View Detailed Statistic on [WOTInspector Replays](${response.data.view_url})`,
                             fields: [
-                                {name: 'Damage Dealt', value: `**${summaryObj.damage_made}**`, inline: true},
-                                {name: 'Damage Taken', value: `**${summaryObj.damage_received}**`, inline: true},
-                                {name: 'Assist Damage', value: `**${summaryObj.damage_assisted}**`, inline: true},
+                                {name: 'Damage Dealt', value: `**${summaryObj.details.damage_made}**`, inline: true},
+                                {name: 'Damage Taken', value: `**${summaryObj.details.damage_received}**`, inline: true},
+                                {name: 'Assist Damage', value: `**${summaryObj.details.damage_assisted}**`, inline: true},
                                 {
                                     name: 'Experience (Base / Total)',
                                     value: `**${summaryObj.exp_base} / ${summaryObj.exp_total}**`
                                 },
                                 {
-                                    name: 'Shots Fired / Hit / Penetrated (Hit Rate)',
-                                    value: `**${summaryObj.shots_made} / ${summaryObj.shots_hit} / ${summaryObj.shots_pen} (${((summaryObj.shots_hit / summaryObj.shots_made) * 100).toFixed(2)}%)**`
+                                    name: 'Shots Fired / Hit / Penetrated / Splash (Hit Rate)',
+                                    value: `**${summaryObj.details.shots_made} / ${summaryObj.details.shots_hit} / ${summaryObj.details.shots_pen} / ${summaryObj.details.shots_splash} (${((summaryObj.details.shots_hit / summaryObj.details.shots_made) * 100).toFixed(2)}%)**`
                                 },
                                 {
-                                    name: 'Hits Taken / Penetrated / Not Penetrated',
-                                    value: `**${summaryObj.hits_received} / ${summaryObj.hits_pen} / ${summaryObj.hits_bounced}**`
+                                    name: 'Hits Taken / Penetrated / Not Penetrated / Splash',
+                                    value: `**${summaryObj.details.hits_received} / ${summaryObj.details.hits_pen} / ${summaryObj.details.hits_bounced} / ${summaryObj.details.hits_splash}**`
                                 },
                                 {
                                     name: 'Enemies Damaged / Killed',
-                                    value: `**${summaryObj.enemies_damaged} / ${summaryObj.enemies_destroyed}**`,
+                                    value: `**${summaryObj.details.enemies_damaged} / ${summaryObj.details.enemies_destroyed}**`,
                                     inline: true
                                 },
                                 {name: pointsfieldName, value: `**${pointsfieldValue}**`, inline: true},
@@ -237,8 +249,11 @@ function uploadReplay(SerBot, url, title = undefined){
                                     value: `**${summaryObj.credits_base} / ${summaryObj.credits_total}**`,
                                     inline: true
                                 },
+                                { name: 'Time Alive', value: `**${util.ConvertTime(summaryObj.details.time_alive*1000)}**`},
+                                { name: 'Mileage (in Meters)' , value: `**${summaryObj.details.distance_travelled}**` }
                             ],
-                            footer: {icon_url: SerBot, text: 'Support SerBot and WOTInspector!'}
+                            "timestamp": new Date(summaryObj.battle_start_timestamp*1000),
+                            footer: {icon_url: SerBot, text: 'Support SerBot and WOTInspector! | Time of Battle'}
                         }
                     }
                 )

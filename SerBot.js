@@ -1167,7 +1167,7 @@ SerBot.on("message", async function(message) {
             }
             const reply = await replay.uploadReplay(SerBot.user.avatarURL,replayURL,title);
             message.channel.send(reply.content, reply);
-            SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} Uploaded Replays. Full String: ${message.content}`);
+            SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} Uploaded Replays.`);
             message.channel.stopTyping(true);
         } catch (error){
             if (error.response !== undefined){
@@ -1198,7 +1198,7 @@ SerBot.on("message", async function(message) {
             if(replayURL !== undefined){
                 message.channel.startTyping();
                 const reply = await replay.uploadReplay(SerBot.user.avatarURL,replayURL,title);
-                SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} Uploaded Replays via AUTOMATIC REPLAY DETECTION. Full String: ${message.content}`);
+                SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} Uploaded Replays via AUTOMATIC REPLAY DETECTION.`);
                 message.channel.send(reply.content, reply);
                 message.channel.stopTyping();
             }
