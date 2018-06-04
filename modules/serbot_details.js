@@ -42,6 +42,14 @@ module.exports = {
             "example": "serverp",
             "usage": ""
         },
+        "ReplaysArray":{
+            "hidden": false,
+            "command": ["REPLAY","REPLAYS"],
+            "name": "Replays upload module",
+            "action": "Upload replays onto WOTInspector",
+            "example": "replay [URL(optional)] [Title of replay (also optional)] / replay [add-channel / remove-channel]",
+            "usage": "URL is optional. SerBot will check for attachment if URL is not found. Title is also optional, WOTInspector will automatically apply one. As for `add-channel` and `remove-channel`, it sets the channel so SerBot can monitor for any replays sent onto the channel, and automatically parse them without the need of using the command. Only Usable for members with Manage Server permissions."
+        },
         "KAArray":{
             "hidden": false,
             "command": ["KEYART","KA"],

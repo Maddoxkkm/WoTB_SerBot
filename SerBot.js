@@ -3,7 +3,11 @@ const SerBotTokens = require('./SerBot.json');
 const prefix = SerBotTokens.prefix;
 const commandInvoke = SerBotTokens.commandInvoke;
 
-const guildSettingsData = require('./modules/guildSettingsData.js');
+
+//Load Enmap and the base
+const Enmap = require('enmap');
+const EnmapSQLite = require('enmap-sqlite');
+const guildSettingsData = new Enmap({ provider: new EnmapSQLite({ name: 'GuildSettings' }) });
 
 //Import Discord Module
 const Discord = require("discord.js");
@@ -29,6 +33,9 @@ const zipdir = require('zip-dir');
 const util = require('util');
 const zip = util.promisify(zipdir);
 const fs = require('fs-extra');
+
+//replays Module
+const replay = require('./modules/replays.js');
 
 //WN7, WN8, MGR calculation module
 const stats = require('./modules/ratings');
@@ -207,11 +214,13 @@ function afterTypingCheck(channel){
     },9000)
 }
 
+
 //Time to Days, Hours, Minutes and Seconds
 /**
  * @return {string}
  */
 function ConvertTime(ms){
+    let timeArray = [];
     let temp = Math.floor(ms / 1000);
     let sec = temp % 60;
     temp = Math.floor(temp / 60);
@@ -220,35 +229,39 @@ function ConvertTime(ms){
     let hrs = temp % 24;
     temp = Math.floor(temp / 24);
     let days = temp;
-    let dayText = ' Days, ';
-    let hrsText = ' Hours, ';
-    let minText = ' Minutes, ';
-    let sectext = ' Seconds ';
-    if (days === 1) {
-        dayText = ' Day, ';
-    } else if (days === 0) {
-        dayText = '';
-        days = '';
+
+    if(days !== 0){
+        if(days === 1){
+            timeArray.push("1 Day")
+        } else {
+            timeArray.push(`${days} Days`)
+        }
     }
-    if (hrs === 1) {
-        hrsText = ' Hour, ';
-    } else if (hrs === 0) {
-        hrs = '';
-        hrsText = '';
+
+    if(hrs !== 0){
+        if(hrs === 1){
+            timeArray.push("1 Hour")
+        } else {
+            timeArray.push(`${hrs} Hours`)
+        }
     }
-    if (min === 1) {
-        minText = ' Minute, ';
-    } else if (min === 0) {
-        min = '';
-        minText = '';
+
+    if(min !== 0){
+        if(min === 1){
+            timeArray.push("1 Minute")
+        } else {
+            timeArray.push(`${min} Minutes`)
+        }
     }
-    if (sec === 1) {
-        sectext = ' Second ';
-    } else if (sec === 0) {
-        sec = '';
-        sectext = '';
+
+    if(sec !== 0){
+        if(days === 1){
+            timeArray.push("1 Second")
+        } else {
+            timeArray.push(`${sec} Seconds`)
+        }
     }
-    return `${days}${dayText}${hrs}${hrsText}${min}${minText}${sec}${sectext}`;
+    return timeArray.join(", ");
 }
 
 //Main SerBot
@@ -1077,6 +1090,124 @@ SerBot.on("message", async function(message) {
             }
         }
     }
+
+    //replays
+    if (commandAliasCheck(fullInput,SerBotDetails.CommandArray.ReplaysArray)){
+        try{
+
+            //
+            if(fullInput[1] !== undefined && message.member.hasPermission("MANAGE_GUILD",false,true,true)){
+                switch(fullInput[1].toLowerCase()){
+                    case "add":
+                    case "add-channel":
+                    case "addchannel":
+                        if (await replay.addAutoChannel(message.guild.id, message.channel.id)){
+                            message.channel.send('',{
+                                embed: {
+                                    description: `SerBot is now watching this channel, <#${message.channel.id}> for replays!`,
+                                    color: 3097087
+                                }
+                            })
+                        } else {
+                            message.channel.send('', {
+                                embed: {
+                                    description: `SerBot has already been watching this channel for replays!`,
+                                    color: 16711680
+                                }
+                            })
+                        }
+                        return;
+                        break;
+                    case "remove":
+                    case "remove-channel":
+                    case "removechannel":
+                        if (await replay.removeAutoChannel(message.guild.id, message.channel.id)){
+                            message.channel.send('',{
+                                embed: {
+                                    description: `Channel <#${message.channel.id}>, is now removed from SerBot's automatic replays detection system!`,
+                                    color: 3097087
+                                }
+                            })
+                        } else {
+                            message.channel.send('', {
+                                embed: {
+                                    description: `SerBot isn't watching this channel for replays!`,
+                                    color: 16711680
+                                }
+                            });
+                        }
+                        return;
+                        break;
+
+                }
+            }
+            message.channel.startTyping();
+            let replayURL;
+            let title;
+            if (message.attachments.array()[0] === undefined && fullInput[1] === undefined) {
+                return;
+            }
+            if (message.attachments.array()[0] === undefined) {
+                replayURL = fullInput[1];
+                if(fullInput[2] === undefined){
+                    title = undefined
+                } else {
+                    title = fullInput.slice(2).join(" ")
+                }
+            } else {
+                replayURL = message.attachments.array()[0].url;
+                if(fullInput[1] === undefined){
+                    title = undefined
+                } else {
+                    title = fullInput.slice(1).join(" ")
+                }
+            }
+            if(!replayURL.endsWith("wotbreplay")){
+                return;
+            }
+            const reply = await replay.uploadReplay(SerBot.user.avatarURL,replayURL,title);
+            message.channel.send(reply.content, reply);
+            SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} Uploaded Replays. Full String: ${message.content}`);
+            message.channel.stopTyping(true);
+        } catch (error){
+            if (error.response !== undefined){
+                errorReply(error.error, message, SerBotDetails.CommandArray.ReplaysArray);
+                message.channel.send(`Returned API: \`\`\`json\n${JSON.stringify(error.response,null,2)}\`\`\``);
+                SerbLog(`Reply:\n${JSON.stringify(error.response,null,2)}`)
+            } else if (error.sus === undefined) {
+                errorReply(SerBotDetails.ErrorArray.Unexpected_Error, message, SerBotDetails.CommandArray.ReplaysArray);
+                message.channel.send(`Error Message: ${error}`);
+                SerbLog(`Unexpected Error: ${error}`)
+            } else {
+                errorReply(error, message, SerBotDetails.CommandArray.ReplaysArray)
+            }
+        }
+    } else if (message.channel.type === "text" && replay.isReplayChannel(message.guild.id,message.channel.id)){
+        try{
+            let replayURL = undefined;
+            let title = undefined;
+            if(message.attachments.array()[0] !== undefined){
+                if(message.attachments.array()[0].url.endsWith('.wotbreplay')){
+                    replayURL = message.attachments.array()[0].url;
+                    title = message.content;
+                }
+            } else if (fullInput[0].endsWith('.wotbreplay')){
+                replayURL = fullInput[0];
+                title = fullInput.slice(1).join(" ");
+            }
+            if(replayURL !== undefined){
+                message.channel.startTyping();
+                const reply = await replay.uploadReplay(SerBot.user.avatarURL,replayURL,title);
+                SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} Uploaded Replays via AUTOMATIC REPLAY DETECTION. Full String: ${message.content}`);
+                message.channel.send(reply.content, reply);
+                message.channel.stopTyping();
+            }
+        } catch (error){
+            errorReply(SerBotDetails.ErrorArray.Unexpected_Error, message, SerBotDetails.CommandArray.ReplaysArray);
+            message.channel.send(`Error Message: ${error}`);
+            SerbLog(`Unexpected Error: ${error}`)
+        }
+    }
 });
 
 SerBot.on('error', error => {
@@ -1084,4 +1215,3 @@ SerBot.on('error', error => {
 });
 
 SerBot.login(SerBotTokens.Token).then(console.log(`Login Successful! Initializing`));
-exports = SerBot;
