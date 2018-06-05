@@ -48,7 +48,7 @@ async function removeAutoChannel(guildID, channelID){
             //whether the property exists
             if(autoUploadChannels.hasProp(guildID,"replayChannelsArray")){
                 //whether it's actually included in the list
-                let replayChannelsArray = autoUploadChannels.getProp(guildID,"replayChannelsArray")
+                let replayChannelsArray = autoUploadChannels.getProp(guildID,"replayChannelsArray");
                 if(replayChannelsArray.includes(channelID)){
                     //then remove it
                     autoUploadChannels.removeFrom(guildID,"replayChannelsArray", channelID.toString());
@@ -221,7 +221,7 @@ function uploadReplay(SerBot, url, title = undefined){
                                 description: `Details of Battle Statistics - View Detailed Statistic on [WOTInspector Replays](${response.data.view_url})`,
                                 fields: [
                                     {name: 'Damage Dealt', value: `**${summaryObj.details.damage_made}**`, inline: true},
-                                    {name: 'Damage Taken', value: `**${summaryObj.details.damage_received}**`, inline: true},
+                                    {name: 'Damage Taken / HP left', value: `**${summaryObj.details.damage_received} / ${summaryObj.details.hitpoints_left}**`, inline: true},
                                     {name: 'Assist Damage', value: `**${summaryObj.details.damage_assisted}**`, inline: true},
                                     {
                                         name: 'Experience (Base / Total)',
