@@ -222,7 +222,7 @@ function uploadReplay(SerBot, url, title = undefined){
                                 fields: [
                                     {name: 'Damage Dealt', value: `**${summaryObj.details.damage_made}**`, inline: true},
                                     {name: 'Damage Taken / HP left', value: `**${summaryObj.details.damage_received} / ${summaryObj.details.hitpoints_left}**`, inline: true},
-                                    {name: 'Assist Damage', value: `**${summaryObj.details.damage_assisted}**`, inline: true},
+                                    {name: 'Tanks Spotted / Assist Damage', value: `**${summaryObj.details.enemies_spotted} / ${summaryObj.details.damage_assisted}**`, inline: true},
                                     {
                                         name: 'Experience (Base / Total)',
                                         value: `**${summaryObj.exp_base} / ${summaryObj.exp_total}**`

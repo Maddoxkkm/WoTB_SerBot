@@ -271,7 +271,7 @@ function ConvertTime(ms){
 
 //Main SerBot
 SerBot.on("message", async function(message) {
-    let fullInput = message.content.split(" ");
+    let fullInput = message.cleanContent.split(" ");
 
     //command to restart bot with help of PM2: '!bot logoff'
     if (message.content.toUpperCase().startsWith(prefix.toUpperCase() + "BOT LOGOFF") && (message.author.id === SerBotTokens.Owner_ID)) {
@@ -1186,7 +1186,7 @@ SerBot.on("message", async function(message) {
             if(message.attachments.array()[0] !== undefined){
                 if(message.attachments.array()[0].url.endsWith('.wotbreplay')){
                     replayURL = message.attachments.array()[0].url;
-                    title = message.content;
+                    title = message.cleanContent;
                 }
             } else if (fullInput[0].endsWith('.wotbreplay')){
                 replayURL = fullInput[0];
