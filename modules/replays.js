@@ -14,9 +14,8 @@ const util = require('./util.js');
 
 async function addAutoChannel(guildID, channelID){
     try{
-        await autoUploadChannels.defer;
         //whether the record itself exists.
-        if(await autoUploadChannels.has(guildID)){
+        if(autoUploadChannels.has(guildID)){
             //whether the property exists
             if(autoUploadChannels.hasProp(guildID,"replayChannelsArray")){
                 //whether it's already included in the list
@@ -45,15 +44,14 @@ async function addAutoChannel(guildID, channelID){
 async function removeAutoChannel(guildID, channelID){
     try{
         //whether the record itself exists.
-        if(await autoUploadChannels.has(guildID)){
+        if(autoUploadChannels.has(guildID)){
             //whether the property exists
             if(autoUploadChannels.hasProp(guildID,"replayChannelsArray")){
                 //whether it's actually included in the list
-                if(autoUploadChannels.getProp(guildID,"replayChannelsArray").includes(channelID)){
+                let replayChannelsArray = autoUploadChannels.getProp(guildID,"replayChannelsArray")
+                if(replayChannelsArray.includes(channelID)){
                     //then remove it
-                    //autoUploadChannels.removeFrom(guildID,"replayChannelsArray", channelID.toString());
-                    let newChannelArray = autoUploadChannels.getProp(guildID,"replayChannelsArray").filter(x => x !== `${channelID}`);
-                    autoUploadChannels.setProp(guildID,"replayChannelsArray",newChannelArray);
+                    autoUploadChannels.removeFrom(guildID,"replayChannelsArray", channelID.toString());
                     return true;
                 }
             } else {
@@ -71,12 +69,12 @@ async function removeAutoChannel(guildID, channelID){
     }
 }
 
-async function isReplayChannel(guildID, channelID){
+function isReplayChannel(guildID, channelID){
     try{
-        if(await autoUploadChannels.has(guildID)){
+        if(autoUploadChannels.has(guildID)){
             let replayChannelsArray = autoUploadChannels.getProp(guildID, "replayChannelsArray");
             if (replayChannelsArray.includes(channelID)){
-                return true
+                return true;
             }
         }
         return false;

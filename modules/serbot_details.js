@@ -106,9 +106,15 @@ module.exports = {
             "reason": "You do not have `Manage Server` Permission to use this command!, please make sure you have the correct permissions before using this command!",
             "console_reason": "no permission"
         },
+        "Missing_Attachment_Replay":{
+            "sus": "error",
+            "catagory": "URL or Attachment of replay not found!",
+            "reason": "Attachment for wotbreplays or url is missing, Please attach a valid attachment or url and try again.",
+            "console_reason": "missing attachment"
+        },
         "Missing_Attachment":{
             "sus": "error",
-            "catagory": "Keyart Generation Missing Image or URL as Attachment!",
+            "catagory": "Keyart Generation Missing Image as Attachment or URL of an Image!",
             "reason": "Attachment for Keyart generation or URL for Keyart Generation is missing, Please attach a valid image attachment and try again.",
             "console_reason": "missing attachment"
         },

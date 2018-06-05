@@ -1099,7 +1099,7 @@ SerBot.on("message", async function(message) {
     //replays
     if (commandAliasCheck(fullInput,SerBotDetails.CommandArray.ReplaysArray)){
         try{
-            // for watching the replays.
+            // for permanently watching the replays.
             if(fullInput[1] !== undefined){
                 switch(fullInput[1].toLowerCase()){
                     case "add":
@@ -1107,19 +1107,9 @@ SerBot.on("message", async function(message) {
                     case "addchannel":
                         if (!hasPermission("MANAGE_GUILD",message)){throw SerBotDetails.ErrorArray.Insufficient_Permission_Server}
                         if (await replay.addAutoChannel(message.guild.id, message.channel.id)){
-                            message.channel.send('',{
-                                embed: {
-                                    description: `SerBot is now watching this channel, <#${message.channel.id}> for replays!`,
-                                    color: 3097087
-                                }
-                            })
+                            message.channel.send('',{embed: {description: `SerBot is now watching this channel, <#${message.channel.id}> for replays!`, color: 3097087}})
                         } else {
-                            message.channel.send('', {
-                                embed: {
-                                    description: `SerBot has already been watching this channel for replays!`,
-                                    color: 16711680
-                                }
-                            })
+                            message.channel.send('', {embed: {description: `SerBot has already been watching this channel for replays!`, color: 16711680}})
                         }
                         return;
                         break;
@@ -1128,31 +1118,23 @@ SerBot.on("message", async function(message) {
                     case "removechannel":
                         if (!hasPermission("MANAGE_GUILD",message)){throw SerBotDetails.ErrorArray.Insufficient_Permission_Server}
                         if (await replay.removeAutoChannel(message.guild.id, message.channel.id)){
-                            message.channel.send('',{
-                                embed: {
-                                    description: `Channel <#${message.channel.id}>, is now removed from SerBot's automatic replays detection system!`,
-                                    color: 3097087
-                                }
-                            })
+                            message.channel.send('',{embed: {description: `Channel <#${message.channel.id}>, is now removed from SerBot's automatic replays detection system!`, color: 3097087}})
                         } else {
-                            message.channel.send('', {
-                                embed: {
-                                    description: `SerBot isn't watching this channel for replays!`,
-                                    color: 16711680
-                                }
-                            });
+                            message.channel.send('', {embed: {description: `SerBot isn't watching this channel for replays!`, color: 16711680}});
                         }
                         return;
                         break;
-
                 }
             }
-            message.channel.startTyping();
             let replayURL;
             let title;
+
+            //search for replays
             if (message.attachments.array()[0] === undefined && fullInput[1] === undefined) {
-                return;
+                throw SerBotDetails.ErrorArray.Missing_Attachment_Replay;
             }
+
+            //if the replay is in the message as url
             if (message.attachments.array()[0] === undefined) {
                 replayURL = fullInput[1];
                 if(fullInput[2] === undefined){
@@ -1161,6 +1143,7 @@ SerBot.on("message", async function(message) {
                     title = fullInput.slice(2).join(" ")
                 }
             } else {
+                //if the replay is in the attachment
                 replayURL = message.attachments.array()[0].url;
                 if(fullInput[1] === undefined){
                     title = undefined
@@ -1168,12 +1151,20 @@ SerBot.on("message", async function(message) {
                     title = fullInput.slice(1).join(" ")
                 }
             }
+
+            //if the attachment is not a wotbreplay
             if(!replayURL.endsWith("wotbreplay")){
-                return;
+                throw SerBotDetails.ErrorArray.Missing_Attachment_Replay;
             }
+
+            //now wait for the reply
+            message.channel.startTyping();
             const reply = await replay.uploadReplay(SerBot.user.avatarURL,replayURL,title);
             message.channel.send(reply.content, reply);
+
+            //usual logging
             SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} Uploaded Replays.`);
+
             message.channel.stopTyping();
         } catch (error){
             if (error.response !== undefined){
