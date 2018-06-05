@@ -207,7 +207,10 @@ function uploadReplay(SerBot, url, title = undefined){
 
                     //name display
                     let clan = await player.playerClan(summaryObj.protagonist);
-                    const nameDisplay = `${summaryObj.player_name} [${clan.data[summaryObj.protagonist].clan.tag}]`;
+                    let nameDisplay;
+                    if(clan.data[summaryObj.protagonist].clan === null) {
+                        nameDisplay = `${summaryObj.player_name}`
+                    } else {nameDisplay = `${summaryObj.player_name} [${clan.data[summaryObj.protagonist].clan.tag}]`}
 
                     resolve({
                             content: `\`\`\`\nSerBot Replay Report V 1.0 - brought to you with the help of WOTInspector.com!\n===========================\n Replay Title: ${summaryObj.title}\n       Player: ${nameDisplay} from ${serverName}\n Tank and Map: ${vehicle}, on Map ${summaryObj.map_name}\n  Battle Type: ${gamemode}\n    Game Mode: ${roomType}\n       Result: ${win}\n Achievements: ${epicMedalsString}\n===========================\nNote: If you don't see the embeded message with Replay Statistics below this line, please Enable >Embed Links< Permission For SerBot!\`\`\``,

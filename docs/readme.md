@@ -19,7 +19,10 @@ Without further ado, let's get into the Commands of SerBot, what they do and how
 Most commands for SerBot consists of a few parts:
 
 - Prefix of the bot (it's `s!`) and the Command (for example `player` or `clan`), without separation with spaces. **Example: `s!player`**
-- 1 or more parameters that are required for the command to work. Example: The player statistics function 
+- 1 or more parameters that are required for the command to work. Example: The player statistics function will need 2 parameters, Server and IGN. and both are required for checking the statistic of the player
+> In cases when a file is involved (Keyart or Replays function), You can supply an attachment instead of an URL, but supplying both URL and Attachment may cause unexpected output.
+- optional parameters. they may be used if needed. Example: `-r` for player stats to also show the Rating of the player.
+> Optional Parameters may or may not come with `-` indicating optional parameter. 
 
 # Player Statistics Function
 As it's name suggests, it is for checking a player's Statistics. Currently only Career Statistics
