@@ -24,14 +24,24 @@ Most commands for SerBot consists of a few parts:
 - optional parameters. they may be used if needed. Example: `-r` for player stats to also show the Rating of the player.
 > Optional Parameters may or may not come with `-` indicating optional parameter. 
 
+> Warning: each elements listed above must be separated with each other with **ONE and ONLY ONE** space. e.g: `s!player  asia maddoxkkm -r` (2 spaces used between command and server region) or `s!player asia maddoxkkm-r` (no space is used between IGN and optional parameter) are not valid command usages and will cause errors.
+
 # Player Statistics Function
 As its name suggests, it is for checking a player's Statistics. Currently only Career Statistics
 available, but in the future I will make it available for check for periodic stats.
 ## Usage
-```s!player [Server] [IGN] [Optional Parameters]```
+```
+s!player [Server] [IGN] [Optional Parameters]
+```
 
-**Example**: ```s!player asia Maddoxkkm -r```
+**Example**: 
+```
+s!player asia Maddoxkkm -r
+```
 The Above command demonstrates a search for the player `Maddoxkkm` from `Asia` Server with the optional parameter `-r` for Rating Battle statistics.
+
+**Example of Command**
+![PS Example](https://i.imgur.com/0chXtzn.png)
 
 ### Command Alias
 Alias of the player commands are: `ps` and `playerstats`. So you can also use `s!ps` (Old SerBot command, but still usable) and `s!playerstats` and they represent the same command as `s!player`.
@@ -46,7 +56,7 @@ It must be one of the following:
 
 ### IGN - In-game name
 
-Self-Explanatory. You need to use your In Game Name to check.
+Self-Explanatory. You need to use a player's In Game Name to check their statistics. In the future I am thinking of adding a way to link a player's WGID to Discord Account, so you are able to check your own statistics (and possibly others) easily.
 
 ### Common Question about MGR 2.2 - what is this?
 
@@ -61,9 +71,52 @@ To explain it in simple words, MGR is a rating that:
 - It's a 2-digit scale from 0 - 99. The distribution of rating mainly lies around 40-50 MGR, with the top 1000th recorded player in Russian server has around 62-63 MGR. [List of MGR ranking here, Russian Server ONLY](http://wblitz.net/ratings/mgr/1000)
 
 
-|Tier   | Battles required for tank to be considered in MGR Calculation        |
+|Tier   | Battles required for tank to be considered in MGR Calculation |
 |:---|:---|
 | 7 | 30 battles | 
 | 8 | 50 battles | 
 | 9 | 75 battles | 
 | 10 | 100 battles |
+
+### Optional Parameters 
+
+- `-r` or Alias `-rating` / `-ranting` is to show Rating of the player (even if it is hidden due to need for recalibration), and the ranking of player (it will show number of calibration battles needed if there is no ranking)
+- `-e` or Alias `-event` is currently not in use. It is for tracking scores for big events, such as the Kpf Pz 70 Damage event.
+
+# Clan Statistics Function
+
+As its name suggests, it is for checking a clan's Statistics. 
+
+## Usage
+```
+s!clan [Server] [Clan Tag] [Optional Parameters]
+```
+
+**Example**: 
+```
+s!clan asia FEAST -m
+```
+The Above command demonstrates a search for the clan tag `FEAST` from `Asia` Server with the optional parameter `-m` for full member list and their statistics
+
+**Example of Command**
+![CS Example](https://i.imgur.com/WEnHaf0.png)
+
+### Command Alias
+Alias of the player commands are: `cs` and `clanstats`. So you can also use `s!cs` (Old SerBot command, but still usable) and `s!clanstats` and they represent the same command as `s!clan`.
+
+### Server
+It must be one of the following:
+
+- `RU`, `Russian` for Russian Server
+- `EU`, `Europe` for Eurpoean Server
+- `NA` for North American Server
+- `Asia`, `SEA`, `SA`(old tag but still usable) for Asia Server/ South-East Asian Server
+
+### Clan Tag
+
+Self-Explanatory. You need to use Clan Tag for checking
+
+
+### Optional Parameters 
+
+- `-m` or Alias `-member` / `-members` is to show Rating of the player (even if it is hidden due to need for recalibration), and the ranking of player (it will show number of calibration battles needed if there is no ranking)
