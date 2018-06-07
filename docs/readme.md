@@ -24,7 +24,15 @@ Most commands for SerBot consists of a few parts:
 - optional parameters. they may be used if needed. Example: `-r` for player stats to also show the Rating of the player.
 > Optional Parameters may or may not come with `-` indicating optional parameter. 
 
-> Warning: each elements listed above must be separated with each other with **ONE and ONLY ONE** space. e.g: `s!player  asia maddoxkkm -r` (2 spaces used between command and server region) or `s!player asia maddoxkkm-r` (no space is used between IGN and optional parameter) are not valid command usages and will cause errors.
+> Warning: each elements listed above must be separated with each other with **ONE and ONLY ONE** space. e.g:
+```
+s!player  asia maddoxkkm -r
+```
+(2 spaces used between command and server region) or 
+```
+s!player asia maddoxkkm-r
+```
+(no space is used between IGN and optional parameter) are not valid command usages and will cause errors.
 
 # Player Statistics Function
 As its name suggests, it is for checking a player's Statistics. Currently only Career Statistics
