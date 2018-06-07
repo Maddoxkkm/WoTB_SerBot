@@ -11,7 +11,7 @@ module.exports = {
             "usage": "Display help Message."
         },
         "BotNewsArray":{
-            "hidden": false,
+            "hidden": true,
             "command": ["NEWS"],
             "name": "RSS feed for SerBot Updates",
             "action": "Request SerBot RSS Updates",
@@ -51,7 +51,7 @@ module.exports = {
             "usage": "URL is optional. SerBot will check for attachment if URL is not found. Title is also optional, WOTInspector will automatically apply one. As for `add-channel` and `remove-channel`, it sets the channel so SerBot can monitor for any replays sent onto the channel, and automatically parse them without the need of using the command. Only Usable for members with Manage Server permissions."
         },
         "KAArray":{
-            "hidden": false,
+            "hidden": true,
             "command": ["KEYART","KA"],
             "name": "Keyart Mod Generation Module",
             "action": "Generate login Keyarts Mods using Images.",

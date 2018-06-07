@@ -1,11 +1,12 @@
 # Introduction to SerBot
+![SerBot_Img](https://i.imgur.com/gN4QqMl.png)
 SerBot is a World of Tanks Blitz Bot, Which has Various Uses.
 This page is used to demon  strate the use of each command in detail, 
 so it causes little confusion as possible.
 
-Firstly, an Invite for this bot to your server: [SerBot Invitation](https://discordapp.com/oauth2/authorize?&client_id=213516317003612180&scope=bot&permissions=16392)
+Firstly, here's an link to invite this bot to your server: [SerBot Invitation](https://discordapp.com/oauth2/authorize?&client_id=213516317003612180&scope=bot&permissions=16392)
 
-If you are interested to help improve and develop SerBot join this 
+If you are interested in improving and developing SerBot join this 
 [Discord Server](http://discord.gg/gt7PquG) and contact `Maddox#0438`.
 
 If you are really interested in this project and wish to support it, 
@@ -14,8 +15,11 @@ server costs and hopefully some will go into buying myself beers and stuff.
 
 Without further ado, let's get into the Commands of SerBot, what they do and how to use it!
 
+* * *
+
 # How commands work
 
+All Commands for SerBot are case-insentive.
 Most commands for SerBot consists of a few parts:
 
 - Prefix of the bot (it's `s!`) and the Command (for example `player` or `clan`), without separation with spaces. **Example: `s!player`**
@@ -25,14 +29,16 @@ Most commands for SerBot consists of a few parts:
 > Optional Parameters may or may not come with `-` indicating optional parameter. 
 
 > Warning: each elements listed above must be separated with each other with **ONE and ONLY ONE** space. e.g:
-```
-s!player  asia maddoxkkm -r
-```
-(2 spaces used between command and server region) or 
-```
-s!player asia maddoxkkm-r
-```
-(no space is used between IGN and optional parameter) are not valid command usages and will cause errors.
+> ```
+> s!player  asia maddoxkkm -r
+> ```
+> (2 spaces used between command and server region) or 
+> ```
+> s!player asia maddoxkkm-r
+> ```
+> (no space is used between IGN and optional parameter) are not valid command usages and will cause errors.
+
+* * * 
 
 # Player Statistics Function
 As its name suggests, it is for checking a player's Statistics. Currently only Career Statistics
@@ -76,7 +82,7 @@ To explain it in simple words, MGR is a rating that:
 - The Higher the tier, the more influence it has on the Account MGR rating.
 - Having more battles on a certain tank doesn't affect it's weighting (influence) on the Account MGR rating, but for each tank tier, there is a minimum number of battles required for the tank to be considered for MGR rating calculation. 
 - Account MGR rating has a few bonuses that include low platoon rate bonus (the lower the higher), and number of tanks eligible for MGR rating calculation
-- It's a 2-digit scale from 0 - 99. The distribution of rating mainly lies around 40-50 MGR, with the top 1000th recorded player in Russian server has around 62-63 MGR. [List of MGR ranking here, Russian Server ONLY](http://wblitz.net/ratings/mgr/1000)
+- It's a 2-digit scale from 0 - 99. The distribution of rating mainly lies around 40-50 MGR, with the top 1000th recorded player in Russian server around 62-63 MGR. [List of MGR ranking here, Russian Server ONLY](http://wblitz.net/ratings/mgr/1000)
 
 
 |Tier   | Battles required for tank to be considered in MGR Calculation |
@@ -90,6 +96,8 @@ To explain it in simple words, MGR is a rating that:
 
 - `-r` or Alias `-rating` / `-ranting` is to show Rating of the player (even if it is hidden due to need for recalibration), and the ranking of player (it will show number of calibration battles needed if there is no ranking)
 - `-e` or Alias `-event` is currently not in use. It is for tracking scores for big events, such as the Kpf Pz 70 Damage event.
+
+* * *
 
 # Clan Statistics Function
 
@@ -128,3 +136,12 @@ Self-Explanatory. You need to use Clan Tag for checking
 ### Optional Parameters 
 
 - `-m` or Alias `-member` / `-members` is to show Rating of the player (even if it is hidden due to need for recalibration), and the ranking of player (it will show number of calibration battles needed if there is no ranking)
+
+* * *
+
+# Help Command
+Self-Explanatory, it contains a link to this maintained page as well, so you can click on it and check this page whenever you want.
+
+* * *
+
+#
