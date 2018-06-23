@@ -154,23 +154,21 @@ function areaDetermination(region){
         if(region === undefined){
             reject(SerBotDetails.ErrorArray.Incorret_Server_Tag)
         }
-        let realm;
-        let error;
         switch (region.toUpperCase()){
             case 'NA':
-                realm = SerBotDetails.ServerIdentifierArray.NA; resolve(realm); break;
+                resolve(SerBotDetails.ServerIdentifierArray.NA); break;
             case 'EU':
             case 'EUROPE':
-                realm = SerBotDetails.ServerIdentifierArray.EU; resolve(realm); break;
+                resolve(SerBotDetails.ServerIdentifierArray.EU); break;
             case 'ASIA':
             case 'SEA':
             case 'SA':
-                realm = SerBotDetails.ServerIdentifierArray.SA; resolve(realm); break;
+                resolve(SerBotDetails.ServerIdentifierArray.SA); break;
             case 'RU':
             case 'RUSSIAN':
-                realm = SerBotDetails.ServerIdentifierArray.RU; resolve(realm); break;
+                resolve(SerBotDetails.ServerIdentifierArray.RU); break;
             default:
-                error = SerBotDetails.ErrorArray.Incorret_Server_Tag; reject (error); break;
+                reject(SerBotDetails.ErrorArray.Incorret_Server_Tag); break;
         }
     })
 }
