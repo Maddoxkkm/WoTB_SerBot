@@ -722,7 +722,7 @@ SerBot.on("message", async function(message) {
                                 name: `SerBot Clan Data Checking V2.0 - By SerBot`,
                                 icon_url: SerBot.user.avatarURL
                             },
-                            "thumbnail": {"url": `http://dl-wotblitz-gc.wargaming.net/icons/clanIcons2x/clan-icon-v2-${csdata.emblem}.png`},
+                            "thumbnail": {"url": `https://wotblitz-gc.gcdn.co/icons/clanEmblems2x/clan-icon-v2-${csdata.emblem}.png`},
                             title: `Embeded Reply of Clan Statistics For [${csdata.clantag}], ${csdata.clanname}`,
                             description: `Clan Rating: ${csdata.clanFinal.rating}`,
                             fields: [
