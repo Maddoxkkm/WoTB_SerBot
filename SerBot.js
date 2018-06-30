@@ -602,9 +602,6 @@ SerBot.on("message", async function(message) {
             let secondCheck = await request.WGApiCall(`${realm.domain}/wotb/clans/info/?application_id=${SerBotTokens.Api_Token}&extra=members&clan_id=${csdata.clan_id}`);
             //clam emblem id fix (custom emblems)
             let secondResult = secondCheck.data[csdata.clan_id];
-            if (secondResult.emblem_set_id < 9999) {
-                secondResult.emblem_set_id -= 2
-            }
             //update the 2nd batch of results into the dedicated object
             Object.assign(csdata, {
                 member_id_stringed: secondResult.members_ids.toString(),
