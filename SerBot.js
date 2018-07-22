@@ -132,14 +132,14 @@ SerBot.setInterval(() => {
 SerBot.on("guildMemberAdd", member => {
  const Union = this.Serbot.guilds.find(guild => guild.id == "341471657627615232")
  const logChannel = Union.channels.find(channel => channel.id == "341477343266734080")
-       logChannel.send('message')
+       logChannel.send(`Member ${member.user.username}#${member.user.discriminator} has Joined the server`)
 })
 
 // Leave message
 SerBot.on("guildMemberRemove", member => {
  const Union = this.Serbot.guilds.find(guild => guild.id == "341471657627615232")
  const logChannel = Union.channels.find(channel => channel.id == "341477343266734080")
-       logChannel.send('message')
+        logChannel.send(`Member ${member.user.username}#${member.user.discriminator} has Left the server`)
 
 //Help Function module
 const helpCommandArray = Object.keys(SerBotDetails.CommandArray)
