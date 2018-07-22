@@ -287,6 +287,7 @@ SerBot.on("message", async function(message) {
                 title: `About SerBot.` ,
                 description: `Created by Maddox#0438`,
                 fields: [
+                    {name:`Open Github Repository`, value:`[Maddoxkkm/WoTB_SerBot](https://github.com/Maddoxkkm/WoTB_SerBot)`},
                     {name:`Language of Bot`, value:`[Node.js](https://nodejs.org/en/)`, inline: true},
                     {name:`Discord API Library`, value:`[Discord.js](https://github.com/hydrabolt/discord.js)`, inline: true},
                     {name:`Uptime of Bot`, value:`${ConvertTime(SerBot.uptime)}`, inline: true},
