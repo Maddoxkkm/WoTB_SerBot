@@ -13,7 +13,8 @@
     "zip-dir": "^1.0.2"
   },
   "scripts": {
-    "start": "node SerBot.js --expose_gc"
+    "start": "node SerBot.js",
+    "startWithGC": "node SerBot.js --expose_gc"
   },
   "description": "This is a WORK IN PROGRESS. It is supposed to be a rewrite to the current in use SerBot which is written in tons of callback hell.",
   "main": "SerBot.js",
