@@ -1,5 +1,6 @@
 # Introduction to SerBot
 ![SerBot_Img](https://i.imgur.com/gN4QqMl.png)
+
 SerBot is a World of Tanks Blitz Bot, Which has Various Uses.
 This page is used to demon  strate the use of each command in detail, 
 so it causes little confusion as possible.
@@ -19,7 +20,7 @@ Without further ado, let's get into the Commands of SerBot, what they do and how
 
 # How commands work
 
-All Commands for SerBot are case-insentive.
+All Commands for SerBot are ***case-insentive***.
 Most commands for SerBot consists of a few parts:
 
 - Prefix of the bot (it's `s!`) and the Command (for example `player` or `clan`), without separation with spaces. **Example: `s!player`**
@@ -144,4 +145,40 @@ Self-Explanatory, it contains a link to this maintained page as well, so you can
 
 * * *
 
-#
+# Server Population Array
+
+This command provides a quick and convinent way to check the currently online numbers of each servers. 
+
+## Usage
+```
+s!serverpopulation
+```
+
+The above command is very simple, no optional parameters required.
+
+**Example of Command**
+![SP Example](https://i.imgur.com/79HyT6D.png)
+
+### Command Alias
+Alias of the Server Population command are: `ServerP`, `SP`.
+
+# Replays Command
+As it's name suggests, this command is for WoTB replays, where a replay is analysed by SerBot then it returns the overview of the battle result.
+
+## Usage
+```
+s!replay [URL of Replay] [Optional Title] <Replay as URL format>
+or
+s!replay [Optional Title] <Replay as Attachment>
+```
+
+**Example:**
+```
+s!replay https://cdn.discordapp.com/attachments/442238341107286026/471341679962619904/20180724_2359_E-100_milbase.wotbreplay Random Replay
+or 
+s!replay Random Replay
+```
+
+## Replay Auto-detection
+
+It is possible to setup SerBot so that it automatically parses any uploaded replay in the desired channel, without the need of any command (`s!replay` is not required after setup.)
