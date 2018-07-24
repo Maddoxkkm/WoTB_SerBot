@@ -3,7 +3,6 @@ const SerBotTokens = require('./SerBot.json');
 const prefix = SerBotTokens.prefix;
 const commandInvoke = SerBotTokens.commandInvoke;
 
-
 //Load Enmap and the base
 const Enmap = require('enmap');
 const EnmapSQLite = require('enmap-sqlite');
@@ -27,12 +26,14 @@ const Parser = require('rss-parser');
 //Request & WG related Modules
 const request = require('./modules/request.js');
 
+//fs
+const fs = require('fs-extra');
+
 //Keyart Requirements
 const sharp = require('sharp');
 const zipdir = require('zip-dir');
 const util = require('util');
 const zip = util.promisify(zipdir);
-const fs = require('fs-extra');
 
 //replays Module
 const replay = require('./modules/replays.js');
@@ -127,6 +128,21 @@ SerBot.setInterval(() => {
     Tankopedia();
     getWN8();
 }, 864000000);
+
+/*
+// Join message
+SerBot.on("guildMemberAdd", member => {
+ const Union = SerBot.guilds.find(guild => guild.id == "341471657627615232");
+ const logChannel = Union.channels.find(channel => channel.id == "341477343266734080");
+       logChannel.send(`Member ${member.user.username}#${member.user.discriminator} has Joined the server`)
+});
+
+// Leave message
+SerBot.on("guildMemberRemove", member => {
+    const Union = SerBot.guilds.find(guild => guild.id == "341471657627615232");
+    const logChannel = Union.channels.find(channel => channel.id == "341477343266734080");
+    logChannel.send(`Member ${member.user.username}#${member.user.discriminator} has Left the server`)
+});*/
 
 //Help Function module
 const helpCommandArray = Object.keys(SerBotDetails.CommandArray)
