@@ -3,7 +3,6 @@ const SerBotTokens = require('./SerBot.json');
 const prefix = SerBotTokens.prefix;
 const commandInvoke = SerBotTokens.commandInvoke;
 
-
 //Load Enmap and the base
 const Enmap = require('enmap');
 const EnmapSQLite = require('enmap-sqlite');
@@ -27,12 +26,14 @@ const Parser = require('rss-parser');
 //Request & WG related Modules
 const request = require('./modules/request.js');
 
+//fs
+const fs = require('fs-extra');
+
 //Keyart Requirements
 const sharp = require('sharp');
 const zipdir = require('zip-dir');
 const util = require('util');
 const zip = util.promisify(zipdir);
-const fs = require('fs-extra');
 
 //replays Module
 const replay = require('./modules/replays.js');
