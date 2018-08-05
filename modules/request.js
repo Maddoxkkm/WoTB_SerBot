@@ -6,7 +6,12 @@ const SerbLog = require('./serblog');
 //require SerBot Details
 const SerBotDetails = require('./serbot_details');
 
-//request (copied from https://stackoverflow.com/questions/38428027/why-await-is-not-working-for-node-request-module)
+/**
+ * request (copied from https://stackoverflow.com/questions/38428027/why-await-is-not-working-for-node-request-module)
+ * @param {String} url
+ * @return {Promise<String>} Returned Body
+ * @constructor
+ */
 function Request(url){
     return new Promise(function (resolve, reject) {
         request(url, function (error, res, body) {
@@ -22,6 +27,12 @@ function Request(url){
     });
 }
 
+
+/**
+ *
+ * @param {object} data Data from WarGaming API
+ * @return {Promise<boolean>} Returns True if it's a valid API response, otherwise will return the entire API response.
+ */
 function apiValidation(data){
     return new Promise(function(resolve, reject){
         if(data.status === 'ok'){
@@ -35,6 +46,7 @@ function apiValidation(data){
         }
     })
 }
+
 
 async function WGApiCall(url){
     return new Promise(async function(resolve, reject){

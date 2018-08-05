@@ -162,6 +162,8 @@ The above command is very simple, no optional parameters required.
 ### Command Alias
 Alias of the Server Population command are: `ServerP`, `SP`.
 
+* * * 
+
 # Replays Command
 As it's name suggests, this command is for WoTB replays, where a replay is analysed by SerBot then it returns the overview of the battle result.
 
@@ -178,7 +180,7 @@ s!replay https://cdn.discordapp.com/attachments/442238341107286026/4713416799626
 or 
 s!replay Random Replay
 ```
-
+The above command demonstrates a replay parse for the replay with the title as `Random Replay` and with the replay as an attachment or the url as `https://cdn.discordapp.com/attachments/442238341107286026/471341679962619904/20180724_2359_E-100_milbase.wotbreplay` 
 ## Replay Auto-detection
 
 It is possible to setup SerBot so that it automatically parses any uploaded replay in the desired channel, without the need of any command (`s!replay` is not required after setup.)

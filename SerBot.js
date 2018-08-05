@@ -55,7 +55,10 @@ function hasPermission(permission, messageObj){
     return messageObj.member.hasPermission(permission,false,true,true)
 }
 
-//Get WN8 data
+
+/**
+ * Get WN8 data from BlitzStars
+ */
 function getWN8(){
     request.Request(`https://www.blitzstars.com/tankaverages.json`)
         .then(body => {
@@ -74,7 +77,9 @@ function getWN8(){
         },function(){SerbLog('Average Tank Data Update failed!')});
 }
 
-//Set Status + Tank Array Module + Updating it
+/**
+ * //Set Status + Tank Array Module + Updating it
+ */
 function SetStatus () {
     const firsthalf = [
         `Nerfing Germans`,
@@ -105,7 +110,9 @@ function SetStatus () {
     }
 }
 
-//grab Tankopedia
+/**
+ * grab Tankopedia
+ */
 function Tankopedia(){
     request.Request(`http://api.wotblitz.asia/wotb/encyclopedia/vehicles/?application_id=${SerBotTokens.Api_Token}&fields=tier%2Cname`)
         .then(body => {
@@ -113,6 +120,7 @@ function Tankopedia(){
             SerbLog('Tank Information Updated!');
         },() => {SerbLog('Tank Information Update failed!')});
 }
+
 
 SerBot.on("ready", () => {
     SerbLog(`Ready to begin! Serving in ${SerBot.channels.size} channels, ${SerBot.guilds.size} servers and ${SerBot.users.filter(x => !x.bot).size} users`);
@@ -159,12 +167,23 @@ if (helpCommandArray.length === 0) {
     }
 // end of Help Function Module
 
+
+/**
+ * 
+ * @param {integer} x 
+ * @return {string}
+ */
 function numberWithCommas(x){
     let parts = x.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
 }
 
+/**
+ *
+ * @return {Promise<Region>}
+ * @param {String} region
+ */
 function areaDetermination(region){
     return new Promise((resolve, reject) => {
         if(region === undefined){
@@ -214,6 +233,12 @@ function errorReply(errorDetails, message,command){
     afterTypingCheck(message.channel);
 }
 
+/**
+ * Check for Whether a Command / It's Alias has been used
+ * @param {String[]} input Input (That has been split into Arrays)
+ * @param {Command Object} commandArray Command Object
+ * @return {boolean} Whether the command is used or not.
+ */
 function commandAliasCheck(input, commandArray){
     let equal = false;
     commandArray.command.map(x => {
@@ -234,9 +259,11 @@ function afterTypingCheck(channel){
 }
 
 
-//Time to Days, Hours, Minutes and Seconds
 /**
- * @return {string}
+ *Time to Days, Hours, Minutes and Seconds
+ * @param {integer} ms The Length of Time in Miliseconds
+ * @return {string} a String descripting the time in human readable format.
+ * @constructor
  */
 function ConvertTime(ms){
     let timeArray = [];
@@ -655,11 +682,11 @@ SerBot.on("message", async function(message) {
                 .map(x => {
                     switch (x.role) {
                         case 'commander':
-                            x.role = 'Clan Commander'; return x; break;
+                            x.role = 'Clan Commander'; return x;
                         case 'executive_officer':
-                            x.role = 'Deputy Commander'; return x; break;
+                            x.role = 'Deputy Commander'; return x;
                         default:
-                            x.role = 'Private'; return x; break;
+                            x.role = 'Private'; return x;
                     }
                 })
                 .map(x => Object.assign(x, thirdRequest[x.account_id]))
@@ -1124,7 +1151,6 @@ SerBot.on("message", async function(message) {
                             message.channel.send('', {embed: {description: `SerBot has already been watching this channel for replays!`, color: 16711680}})
                         }
                         return;
-                        break;
                     case "remove":
                     case "remove-channel":
                     case "removechannel":
@@ -1135,7 +1161,6 @@ SerBot.on("message", async function(message) {
                             message.channel.send('', {embed: {description: `SerBot isn't watching this channel for replays!`, color: 16711680}});
                         }
                         return;
-                        break;
                 }
             }
             let replayURL;
