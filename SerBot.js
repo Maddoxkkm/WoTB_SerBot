@@ -17,6 +17,9 @@ const SerBot = new Discord.Client({
     disabledEvents: ["TYPING_START"]
 });
 
+//Import Server Regions
+const Region = require('./modules/Region');
+
 //Import Webhook Module
 const SerbLog = require('./modules/serblog');
 
@@ -181,31 +184,29 @@ function numberWithCommas(x){
 
 /**
  *
- * @return {Promise<Region>}
- * @param {String} region
+ * @return {region}
+ * @param {string} region
  */
 function areaDetermination(region){
-    return new Promise((resolve, reject) => {
         if(region === undefined){
-            reject(SerBotDetails.ErrorArray.Incorret_Server_Tag)
+            throw SerBotDetails.ErrorArray.Incorret_Server_Tag;
         }
         switch (region.toUpperCase()){
             case 'NA':
-                resolve(SerBotDetails.ServerIdentifierArray.NA); break;
+                return Region.NA;
             case 'EU':
             case 'EUROPE':
-                resolve(SerBotDetails.ServerIdentifierArray.EU); break;
+                return Region.EU;
             case 'ASIA':
             case 'SEA':
             case 'SA':
-                resolve(SerBotDetails.ServerIdentifierArray.SA); break;
+                return Region.ASIA;
             case 'RU':
             case 'RUSSIAN':
-                resolve(SerBotDetails.ServerIdentifierArray.RU); break;
+                return Region.RU;
             default:
-                reject(SerBotDetails.ErrorArray.Incorret_Server_Tag); break;
+                throw SerBotDetails.ErrorArray.Incorret_Server_Tag;
         }
-    })
 }
 
 function errorReply(errorDetails, message,command){
@@ -233,12 +234,6 @@ function errorReply(errorDetails, message,command){
     afterTypingCheck(message.channel);
 }
 
-/**
- * Check for Whether a Command / It's Alias has been used
- * @param {String[]} input Input (That has been split into Arrays)
- * @param {Command Object} commandArray Command Object
- * @return {boolean} Whether the command is used or not.
- */
 function commandAliasCheck(input, commandArray){
     let equal = false;
     commandArray.command.map(x => {

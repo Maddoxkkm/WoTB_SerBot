@@ -166,38 +166,4 @@ module.exports = {
             "reason": "Unexpected Error Occured. I have already Forwarded a full Error Log To Maddox to investigate the issue. \nPlease try the command again.\nHe will eventaually realise the shit he had made if you throw enough error logs at him.",
             "console_reason": "Unexpected Error"
         }
-    },
-    "ServerIdentifierArray":{
-        "SA":{
-            "server": "SA",
-            "server_fullName": "South-East Asian Server",
-            "domain": "http://api.wotblitz.asia",
-            "display": "SEA",
-            "exception_domain": "asia",
-            "lan": "en"
-        },
-        "EU":{
-            "server": "EU",
-            "server_fullName": "European Server",
-            "domain": "http://api.wotblitz.eu",
-            "display": "EU",
-            "exception_domain": "eu",
-            "lan": "en"
-        },
-        "NA":{
-            "server": "NA",
-            "server_fullName": "North America Server",
-            "domain": "http://api.wotblitz.com",
-            "display": "NA",
-            "exception_domain": "com",
-            "lan": "en"
-        },
-        "RU":{
-            "server": "RU",
-            "server_fullName": "Russian Server",
-            "domain": "http://api.wotblitz.ru",
-            "display": "RU",
-            "exception_domain": "ru",
-            "lan": "ru"
-        }
     }};
