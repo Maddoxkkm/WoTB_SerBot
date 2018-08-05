@@ -1,7 +1,6 @@
 /**
- * @typedef {object} region
  * @readonly
- * @enum {region}
+ * @enum {Region}
  */
 const Region = {
     NA:{

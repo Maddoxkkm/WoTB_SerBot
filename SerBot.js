@@ -184,7 +184,7 @@ function numberWithCommas(x){
 
 /**
  *
- * @return {region}
+ * @return {Region}
  * @param {string} region
  */
 function areaDetermination(region){
