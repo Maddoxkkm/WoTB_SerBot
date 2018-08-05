@@ -544,7 +544,7 @@ SerBot.on("message", async function(message) {
                     icon_url: SerBot.user.avatarURL
                 },
                 title: `${SerBot.user.username}'s Help File`,
-                description: `Help file of ${SerBot.user.username} - Commands and Stuff. If you have any enquiries please enter [MadWoTBMods](https://discord.gg/gt7PquG) Server and ask the creator of SerBot <@76584929063866368> (Maddox#0438) for help. \nIf you wish to support the operations of this bot (the hosting fees of this bot is all from Maddox's pocket), be a patreon today! (https://www.patreon.com/maddoxkkm)`,
+                description: `Help file of ${SerBot.user.username} - Commands and Stuff. If you have any enquiries please enter [SerBot Headquarters](https://discord.gg/8JvEuuR) Server and ask the creator of SerBot <@76584929063866368> (Maddox#0438) for help. \nIf you wish to support the operations of this bot (the hosting fees of this bot is all from Maddox's pocket), be a patreon today! (https://www.patreon.com/maddoxkkm)`,
                 fields: helpCommandArray
             }
         })

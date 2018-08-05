@@ -1,14 +1,22 @@
+/**
+ * A function that converts a integer to a String that contains comma
+ * @param {number} x
+ * @return {string}
+ */
 function numberWithCommas(x){
     let parts = x.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
 }
 
-//Time to Days, Hours, Minutes and Seconds
+
 /**
+ * A Function that converts ms to a String that indicates lengh ot time
+ * @param {number} ms
  * @return {string}
+ * @constructor
  */
-function ConvertTime(ms){
+function convertTime(ms){
     let timeArray = [];
     let temp = Math.floor(ms / 1000);
     let sec = temp % 60;
@@ -55,4 +63,4 @@ function ConvertTime(ms){
 
 
 exports.numberWithCommas = numberWithCommas;
-exports.ConvertTime = ConvertTime;
+exports.convertTime = convertTime;
