@@ -3,7 +3,20 @@ const EnmapSQLite = require('enmap-sqlite');
 // Oh look a shortcut to initializing ;)
 const myColl = new Enmap({ provider: new EnmapSQLite({ name: 'GuildSettings' }) });
 
-exports = myColl;
+class GuildSettings{
+    constructor(guildID){
+        this.guildID = guildID;
+        this.guildSettings = myColl.get(this.guildID)
+    }
+
+
+    update(){
+        myColl.set(this.guildID, this.guildSettings);
+    }
+
+
+}
+
 
 
 /*
