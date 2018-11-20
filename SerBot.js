@@ -18,7 +18,7 @@ const SerBot = new Discord.Client({
 });
 
 //Import Server Regions
-const Region = require('./modules/Region');
+const Region = require('./modules/Region.js');
 
 //Import Webhook Module
 const SerbLog = require('./modules/serblog');
@@ -621,7 +621,7 @@ SerBot.on("message", async function(message) {
             }
 
             //1st API check
-            let firstCheck = await request.WGApiCall(`${realm.domain}/wotb/clans/list/?application_id=${SerBotTokens.Api_Token}&search=${stringCommand.search}&limit=1`);
+            let firstCheck = await request.WGApiCall(`${realm.apiDomain}/wotb/clans/list/?application_id=${SerBotTokens.Api_Token}&search=${stringCommand.search}&limit=1`);
             //determine whether there is such clan or not (notice the ! in front xD)
             if (firstCheck.meta.count === 0) {
                 throw (SerBotDetails.ErrorArray.No_Clan)
@@ -638,7 +638,7 @@ SerBot.on("message", async function(message) {
             };
 
             //2nd API check
-            let secondCheck = await request.WGApiCall(`${realm.domain}/wotb/clans/info/?application_id=${SerBotTokens.Api_Token}&extra=members&clan_id=${csdata.clan_id}`);
+            let secondCheck = await request.WGApiCall(`${realm.apiDomain}/wotb/clans/info/?application_id=${SerBotTokens.Api_Token}&extra=members&clan_id=${csdata.clan_id}`);
             //clam emblem id fix (custom emblems)
             let secondResult = secondCheck.data[csdata.clan_id];
             //update the 2nd batch of results into the dedicated object
@@ -663,7 +663,7 @@ SerBot.on("message", async function(message) {
 
 
             //3rd API check
-            let thirdCheck = await request.WGApiCall(`${realm.domain}/wotb/account/info/?application_id=${SerBotTokens.Api_Token}&account_id=${csdata.member_id_stringed}&fields=statistics.all.battles%2Cstatistics.all.damage_dealt%2C%2Cstatistics.all.damage_received%2Cstatistics.all.wins%2Ccreated_at%2Clast_battle_time`);
+            let thirdCheck = await request.WGApiCall(`${realm.apiDomain}/wotb/account/info/?application_id=${SerBotTokens.Api_Token}&account_id=${csdata.member_id_stringed}&fields=statistics.all.battles%2Cstatistics.all.damage_dealt%2C%2Cstatistics.all.damage_received%2Cstatistics.all.wins%2Ccreated_at%2Clast_battle_time`);
             let thirdRequest = thirdCheck.data;
             //sort member list according to role and add the name of the role
             csdata.memberArray = csdata.member_id_array
@@ -884,9 +884,9 @@ SerBot.on("message", async function(message) {
             //1st API Check (obtain account id from IGN)
             let firstcheck;
             if (fuzzysearch) {
-                firstcheck = await request.WGApiCall(`${realm.domain}/wotb/account/list/?application_id=71df07a3f5c764028c167d09eec0cd99&type=startswith&search=${stringCommand.search}&limit=1`)
+                firstcheck = await request.WGApiCall(`${realm.apiDomain}/wotb/account/list/?application_id=71df07a3f5c764028c167d09eec0cd99&type=startswith&search=${stringCommand.search}&limit=1`)
             } else {
-                firstcheck = await request.WGApiCall(`${realm.domain}/wotb/account/list/?application_id=71df07a3f5c764028c167d09eec0cd99&type=exact&search=${stringCommand.search}`)
+                firstcheck = await request.WGApiCall(`${realm.apiDomain}/wotb/account/list/?application_id=71df07a3f5c764028c167d09eec0cd99&type=exact&search=${stringCommand.search}`)
             }
             if (firstcheck.meta.count === 0) {
                 throw (SerBotDetails.ErrorArray.No_Player);
@@ -899,7 +899,7 @@ SerBot.on("message", async function(message) {
             };
 
             //2nd API Check
-            let secondCheck = await request.WGApiCall(`${realm.domain}/wotb/account/info/?application_id=71df07a3f5c764028c167d09eec0cd99&language=en&account_id=${psdata.acc_id}&fields=-statistics.clan%2C-statistics.all.max_frags_tank_id%2C-statistics.all.frags8p%2C-statistics.frags%2C-nickname%2C-private%2C-updated_at`);
+            let secondCheck = await request.WGApiCall(`${realm.apiDomain}/wotb/account/info/?application_id=71df07a3f5c764028c167d09eec0cd99&language=en&account_id=${psdata.acc_id}&fields=-statistics.clan%2C-statistics.all.max_frags_tank_id%2C-statistics.all.frags8p%2C-statistics.frags%2C-nickname%2C-private%2C-updated_at`);
             let secondResult = secondCheck.data[psdata.acc_id];
             //update the 2nd batch of results into the dedicated object
             Object.assign(psdata, {
@@ -932,7 +932,7 @@ SerBot.on("message", async function(message) {
             }
 
             //3rd API Check (WN8, WN7 and MGR 2.2 (excluding platoon wins) Implementation)
-            let thirdCheck = await request.WGApiCall(`${realm.domain}/wotb/tanks/stats/?application_id=71df07a3f5c764028c167d09eec0cd99&account_id=${psdata.acc_id}&fields=all.spotted%2C+all.frags%2C+all.wins%2C+all.battles%2C+all.damage_dealt%2C+all.damage_received%2C+all.dropped_capture_points%2C+all.survived_battles%2C+tank_id`);
+            let thirdCheck = await request.WGApiCall(`${realm.apiDomain}/wotb/tanks/stats/?application_id=71df07a3f5c764028c167d09eec0cd99&account_id=${psdata.acc_id}&fields=all.spotted%2C+all.frags%2C+all.wins%2C+all.battles%2C+all.damage_dealt%2C+all.damage_received%2C+all.dropped_capture_points%2C+all.survived_battles%2C+tank_id`);
             let thirdResult = thirdCheck.data[psdata.acc_id];
             if(thirdResult === null){
                 throw (SerBotDetails.ErrorArray.No_Battles)
@@ -967,7 +967,7 @@ SerBot.on("message", async function(message) {
             });
 
             //quick 4th check (platoon wins, just for MGR rating)
-            let forthCheck = await request.WGApiCall(`${realm.domain}/wotb/account/achievements/?application_id=71df07a3f5c764028c167d09eec0cd99&account_id=${psdata.acc_id}&fields=max_series`);
+            let forthCheck = await request.WGApiCall(`${realm.apiDomain}/wotb/account/achievements/?application_id=71df07a3f5c764028c167d09eec0cd99&account_id=${psdata.acc_id}&fields=max_series`);
             let forthResult = forthCheck.data[psdata.acc_id];
             if (forthResult.max_series.jointVictory === undefined) {
                 psdata.playerfinal.platooned_wins = 0
@@ -982,7 +982,7 @@ SerBot.on("message", async function(message) {
             psdata.playerfinal.WGPR = stats.PersonalRating(psdata.playerfinal.battles, psdata.playerfinal.wr, psdata.playerfinal.survive, psdata.playerfinal.hitrate, psdata.playerfinal.average_dmg);
 
             //5th Api Check (clan related)
-            let fifthCheck = await request.WGApiCall(`${realm.domain}/wotb/clans/accountinfo/?application_id=71df07a3f5c764028c167d09eec0cd99&account_id=${psdata.acc_id}&fields=clan_id%2Cjoined_at%2Crole`);
+            let fifthCheck = await request.WGApiCall(`${realm.apiDomain}/wotb/clans/accountinfo/?application_id=71df07a3f5c764028c167d09eec0cd99&account_id=${psdata.acc_id}&fields=clan_id%2Cjoined_at%2Crole`);
             let fifthResult = fifthCheck.data[psdata.acc_id];
             let psReply;
             let hasClan;
@@ -1011,10 +1011,10 @@ SerBot.on("message", async function(message) {
             }
 
             //6th API Call
-            //let sixthCheck = JSON.parse(await Request(`${realm.domain}/wotb/clans/info/?application_id=71df07a3f5c764028c167d09eec0cd99&clan_id=${psdata.clan_id}&fields=name%2Ctag`));
+            //let sixthCheck = JSON.parse(await Request(`${realm.apiDomain}/wotb/clans/info/?application_id=71df07a3f5c764028c167d09eec0cd99&clan_id=${psdata.clan_id}&fields=name%2Ctag`));
             //validate 5th API return value
             if (hasClan) {
-                let sixthCheck = await request.WGApiCall(`${realm.domain}/wotb/clans/info/?application_id=71df07a3f5c764028c167d09eec0cd99&clan_id=${psdata.clan_id}&fields=name%2Ctag`);
+                let sixthCheck = await request.WGApiCall(`${realm.apiDomain}/wotb/clans/info/?application_id=71df07a3f5c764028c167d09eec0cd99&clan_id=${psdata.clan_id}&fields=name%2Ctag`);
                 psdata.playerfinal.clan = sixthCheck.data[psdata.clan_id];
                 psReply = `Name      : ${psdata.ign} [${psdata.playerfinal.clan.tag}] From ${realm.server_fullName}\nClan      : ${psdata.playerfinal.clan.name} (Joined ${psdata.playerfinal.joined_clan} Days Ago)\nPosition  : ${psdata.playerfinal.clan_role}\n\nDate Of Account Creation: ${psdata.playerfinal.created}\nLast Played: ${LastPlayed} Ago`
             }
