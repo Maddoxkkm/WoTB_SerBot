@@ -76,7 +76,7 @@ exports.MGR = function(playerdata){
 exports.wn8 = function(playerdata){
     let wn8Table = require('../BlitzStars.json');
     let wn8_cache = playerdata.tanks_data.reduce((total,x) => {
-        if(wn8Table[x.tank_id] !== undefined){
+        if(wn8Table[x.tank_id] !== undefined && x.battles > 0){
             //rDamage accumulation
             total.rDamage.acc += x.battles * x.avg_dmg;
             total.rDamage.exp += x.battles * wn8Table[x.tank_id].dmg;
