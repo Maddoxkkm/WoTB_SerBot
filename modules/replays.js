@@ -84,7 +84,7 @@ function isReplayChannel(guildID, channelID){
     }
 }
 
-function uploadReplay(SerBot, url, title = undefined){
+function uploadReplay(icon, url, title = undefined){
     return new Promise(async function(resolve, reject){
         try {
             let replayrequestURL;
@@ -127,7 +127,7 @@ function uploadReplay(SerBot, url, title = undefined){
                     }
 
                     //process realm
-                    const serverName = player.playerRealm(summaryObj.protagonist).server_fullName;
+                    const serverName = player.playerRealm(summaryObj.protagonist).serverName;
 
                     //parsing Mastery Data
                     let masteryData = {};
@@ -216,7 +216,7 @@ function uploadReplay(SerBot, url, title = undefined){
                             content: `\`\`\`\nSerBot Replay Report V 1.0 - brought to you with the help of WOTInspector.com!\n===========================\n Replay Title: ${summaryObj.title}\n       Player: ${nameDisplay} from ${serverName}\n Tank and Map: ${vehicle}, on Map ${summaryObj.map_name}\n  Battle Type: ${gamemode}\n    Game Mode: ${roomType}\n       Result: ${win}\n Achievements: ${epicMedalsString}\n===========================\nNote: If you don't see the embeded message with Replay Statistics below this line, please Enable >Embed Links< Permission For SerBot!\`\`\``,
                             embed: {
                                 color: masteryData.color,
-                                author: {name: 'SerBot Replay Data Parsing V 1.0 - By SerBot & WOTInspector', icon_url: SerBot},
+                                author: {name: 'SerBot Replay Data Parsing V 1.0 - By SerBot & WOTInspector', icon_url: icon},
                                 title: `Embeded Reply of Replay Statistics For ${summaryObj.player_name}`,
                                 "thumbnail": {
                                     "url": "https://i.imgur.com/AyWeJNM.png"
@@ -249,11 +249,11 @@ function uploadReplay(SerBot, url, title = undefined){
                                         value: `**${summaryObj.credits_base} / ${summaryObj.credits_total}**`,
                                         inline: true
                                     },
-                                    { name: 'Time Alive', value: `**${util.ConvertTime(summaryObj.details.time_alive*1000)}**`},
+                                    { name: 'Time Alive', value: `**${util.convertTime(summaryObj.details.time_alive*1000)}**`},
                                     { name: 'Mileage (in Meters)' , value: `**${summaryObj.details.distance_travelled}**` }
                                 ],
                                 "timestamp": new Date(summaryObj.battle_start_timestamp*1000),
-                                footer: {icon_url: SerBot, text: 'Support SerBot and WOTInspector! | Time of Battle'}
+                                footer: {icon_url: icon, text: 'Support SerBot and WOTInspector! | Time of Battle'}
                             }
                         }
                     )

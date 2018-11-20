@@ -1,4 +1,4 @@
-const realm = require('./serbot_details.js').ServerIdentifierArray;
+const realm = require('./Region.js');
 const request = require('./request.js');
 
 exports.playerStats = function (realm, IGN){
@@ -22,7 +22,7 @@ function playerRealm (ID){
     if (ID < 2000000000) {
         return realm.NA;
     }
-    return realm.SA;
+    return realm.ASIA;
 }
 
 async function playerClan (ID){
@@ -30,7 +30,7 @@ async function playerClan (ID){
         try{
             //first get realm
             const realm = playerRealm(ID);
-            let clanCheck = await request.WGApiCall(`${realm.domain}/wotb/clans/accountinfo/?application_id=71df07a3f5c764028c167d09eec0cd99&account_id=${ID}&fields=clan%2Cjoined_at&extra=clan`);
+            let clanCheck = await request.WGApiCall(`${realm.apiDomain}/wotb/clans/accountinfo/?application_id=71df07a3f5c764028c167d09eec0cd99&account_id=${ID}&fields=clan%2Cjoined_at&extra=clan`);
             resolve(clanCheck)
         } catch(err){
             reject(err)

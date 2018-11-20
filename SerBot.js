@@ -1016,7 +1016,7 @@ SerBot.on("message", async function(message) {
             if (hasClan) {
                 let sixthCheck = await request.WGApiCall(`${realm.domain}/wotb/clans/info/?application_id=71df07a3f5c764028c167d09eec0cd99&clan_id=${psdata.clan_id}&fields=name%2Ctag`);
                 psdata.playerfinal.clan = sixthCheck.data[psdata.clan_id];
-                psReply = `Name      : ${psdata.ign} [${psdata.playerfinal.clan.tag}] From ${realm.server_fullName}\nClan      : ${psdata.playerfinal.clan.name} (Joined ${psdata.playerfinal.joined_clan} Days Ago)\nPosition  : ${psdata.playerfinal.clan_role}\n\nDate Of Account Creation: ${psdata.playerfinal.created}\nLast Played: ${LastPlayed}Ago`
+                psReply = `Name      : ${psdata.ign} [${psdata.playerfinal.clan.tag}] From ${realm.server_fullName}\nClan      : ${psdata.playerfinal.clan.name} (Joined ${psdata.playerfinal.joined_clan} Days Ago)\nPosition  : ${psdata.playerfinal.clan_role}\n\nDate Of Account Creation: ${psdata.playerfinal.created}\nLast Played: ${LastPlayed} Ago`
             }
 
             SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} checked Player Data of ${psdata.ign} From ${realm.server_fullName}. Full String: ${message.content}`);
