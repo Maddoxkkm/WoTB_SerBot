@@ -748,8 +748,8 @@ SerBot.on("message", async function(message) {
             }
 
             //send the standard response!
-            SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} checked Clan Data of [${csdata.clantag}] From ${realm.server_fullName}. Full String: ${message.content}`);
-            message.channel.send(`\`\`\`\nSerBot Clan Data Checking V2.0\n===========================\nClan Name   : ${csdata.clanname} [${csdata.clantag}] ${special} From ${realm.server_fullName}\nCreator     : ${csdata.creator}\nClan Leader : ${csdata.leader}\n\nDate of Creation : ${csdata.createddate}\n\nClan Motto : ${csdata.motto}\nClan Description : ${csdata.description}\n===========================\nNote: If you don't see the embeded message with Clan Statistics below this line, please Enable >Embed Links< Permission For SerBot!\`\`\``,
+            SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} checked Clan Data of [${csdata.clantag}] From ${realm.serverName}. Full String: ${message.content}`);
+            message.channel.send(`\`\`\`\nSerBot Clan Data Checking V2.0\n===========================\nClan Name   : ${csdata.clanname} [${csdata.clantag}] ${special} From ${realm.serverName}\nCreator     : ${csdata.creator}\nClan Leader : ${csdata.leader}\n\nDate of Creation : ${csdata.createddate}\n\nClan Motto : ${csdata.motto}\nClan Description : ${csdata.description}\n===========================\nNote: If you don't see the embeded message with Clan Statistics below this line, please Enable >Embed Links< Permission For SerBot!\`\`\``,
                 {
                     embed:
                         {
@@ -988,10 +988,10 @@ SerBot.on("message", async function(message) {
             let hasClan;
             let LastPlayed = ConvertTime(new Date().getTime() - psdata.playerfinal.last_battle_time);
             if (fifthResult === null) {
-                psReply = `Name      : ${psdata.ign} From ${realm.server_fullName}\n\nDate Of Account Creation: ${psdata.playerfinal.created}\nLast Played: ${LastPlayed}Ago`;
+                psReply = `Name      : ${psdata.ign} From ${realm.serverName}\n\nDate Of Account Creation: ${psdata.playerfinal.created}\nLast Played: ${LastPlayed}Ago`;
                 hasClan = false;
             } else if (fifthResult.clan_id === null){
-                psReply = `Name      : ${psdata.ign} From ${realm.server_fullName}\n\nDate Of Account Creation: ${psdata.playerfinal.created}\nLast Played: ${LastPlayed}Ago`;
+                psReply = `Name      : ${psdata.ign} From ${realm.serverName}\n\nDate Of Account Creation: ${psdata.playerfinal.created}\nLast Played: ${LastPlayed}Ago`;
                 hasClan = false;
             } else {
                 hasClan = true;
@@ -1016,10 +1016,10 @@ SerBot.on("message", async function(message) {
             if (hasClan) {
                 let sixthCheck = await request.WGApiCall(`${realm.apiDomain}/wotb/clans/info/?application_id=71df07a3f5c764028c167d09eec0cd99&clan_id=${psdata.clan_id}&fields=name%2Ctag`);
                 psdata.playerfinal.clan = sixthCheck.data[psdata.clan_id];
-                psReply = `Name      : ${psdata.ign} [${psdata.playerfinal.clan.tag}] From ${realm.server_fullName}\nClan      : ${psdata.playerfinal.clan.name} (Joined ${psdata.playerfinal.joined_clan} Days Ago)\nPosition  : ${psdata.playerfinal.clan_role}\n\nDate Of Account Creation: ${psdata.playerfinal.created}\nLast Played: ${LastPlayed} Ago`
+                psReply = `Name      : ${psdata.ign} [${psdata.playerfinal.clan.tag}] From ${realm.serverName}\nClan      : ${psdata.playerfinal.clan.name} (Joined ${psdata.playerfinal.joined_clan} Days Ago)\nPosition  : ${psdata.playerfinal.clan_role}\n\nDate Of Account Creation: ${psdata.playerfinal.created}\nLast Played: ${LastPlayed} Ago`
             }
 
-            SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} checked Player Data of ${psdata.ign} From ${realm.server_fullName}. Full String: ${message.content}`);
+            SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} checked Player Data of ${psdata.ign} From ${realm.serverName}. Full String: ${message.content}`);
             message.channel.send(`\`\`\`\nSerBot Player Data Checking V 4.0\n===========================\n${psReply}\n===========================\nNote: If you don't see the embeded message with Player Statistics below this line, please Enable >Embed Links< Permission For SerBot!\`\`\``, {
                 embed: {
                     color: psdata.playerfinal.wn8.color,
@@ -1054,7 +1054,7 @@ SerBot.on("message", async function(message) {
             });
 
             if(rating){
-                let ratingreq = JSON.parse(await request.Request(`https://wotblitz.${realm.exception_domain}/${realm.lan}/api/rating-leaderboards/user/${psdata.acc_id}/?neighbors=0`));
+                let ratingreq = JSON.parse(await request.Request(`https://${realm.portalPage}/${realm.mainLanguage}/api/rating-leaderboards/user/${psdata.acc_id}/?neighbors=0`));
                 if(ratingreq === undefined){
                     throw {
                         response: ratingreq,
@@ -1090,7 +1090,7 @@ SerBot.on("message", async function(message) {
                             color: psdata.playerfinal.league_color,
                             author: {name: 'SerBot Player Data Checking Beta (Ratings Module)', icon_url: SerBot.user.avatarURL},
                             thumbnail:{url: `http://static-wbp-sg.wgcdn.co/dcont/1.28.0/fb/image/${psdata.playerfinal.league_img}`},
-                            title: `Embeded Reply of Rating Statistics For ${psdata.ign} From ${realm.server_fullName}` ,
+                            title: `Embeded Reply of Rating Statistics For ${psdata.ign} From ${realm.serverName}` ,
                             fields: [
                                 {name: 'Player Rating', value: `**${psdata.playerfinal.league_rating} (${psdata.playerfinal.league_name})**`, inline: true},
                                 {name: 'Ranking', value: `**${psdata.playerfinal.league_ranking}**`, inline: true}
