@@ -551,15 +551,19 @@ SerBot.on("message", async function(message) {
             message.channel.startTyping();
             Promise.all([request.WGApiCall(`http://api.worldoftanks.asia/wgn/servers/info/?application_id=${SerBotTokens.Api_Token}`), request.WGApiCall(`http://api.worldoftanks.com/wgn/servers/info/?application_id=${SerBotTokens.Api_Token}`), request.WGApiCall(`http://api.worldoftanks.eu/wgn/servers/info/?application_id=${SerBotTokens.Api_Token}`), request.WGApiCall(`http://api.worldoftanks.ru/wgn/servers/info/?application_id=${SerBotTokens.Api_Token}`)])
                 .then(result => {
+                    console.log(result);
                     let flattendata = [];
-                    result.map(x => x.data.wotb
-                        .map (y => {
+                    result.map(x => {if (x.data.wotb === undefined) {
+
+                    } else {
+                        x.data.wotb.map (y => {
                             flattendata.push({
                                 name: `For ${y.server} Server:`,
                                 value: `${y.players_online} Players Online`,
                                 inline: true
                             })
-                        }));
+                        })
+                    }});
                     SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} checked Server Population Data`);
                     message.channel.send(``, {
                         embed: {
