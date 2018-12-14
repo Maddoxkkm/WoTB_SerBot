@@ -1,5 +1,5 @@
 const medalList = require('./medal_replay.json');
-const player = require('./playerstats.js');
+const player = require('./players.js');
 
 //Enmap loading
 const Enmap = require('enmap');

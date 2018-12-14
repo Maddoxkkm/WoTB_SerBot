@@ -18,7 +18,7 @@ const SerBot = new Discord.Client({
 });
 
 //Import Server Regions
-const Region = require('./modules/Region.js');
+const Region = require('./modules/region.js');
 
 //Import Webhook Module
 const SerbLog = require('./modules/serblog');
@@ -28,6 +28,9 @@ const Parser = require('rss-parser');
 
 //Request & WG related Modules
 const request = require('./modules/request.js');
+
+//Import SerBot's small webservice
+const webService = require('./modules/link.js');
 
 //fs
 const fs = require('fs-extra');
@@ -1058,7 +1061,7 @@ SerBot.on("message", async function(message) {
             });
 
             if(rating){
-                let ratingreq = JSON.parse(await request.Request(`https://${realm.portalPage}/${realm.mainLanguage}/api/rating-leaderboards/user/${psdata.acc_id}/?neighbors=0`));
+                let ratingreq = JSON.parse(await request.Request(`${realm.portalPage}/${realm.mainLanguage}/api/rating-leaderboards/user/${psdata.acc_id}/?neighbors=0`));
                 if(ratingreq === undefined){
                     throw {
                         response: ratingreq,
@@ -1248,3 +1251,5 @@ SerBot.on('error', error => {
 });
 
 SerBot.login(SerBotTokens.Token).then(console.log(`Login Successful! Initializing`));
+
+webService.webService.listen(80);

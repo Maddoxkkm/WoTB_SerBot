@@ -2,35 +2,36 @@
  * @readonly
  * @enum {Region}
  */
-const Region = {
+const region = {
     NA:{
         serverName: "North America Server",
         apiDomain: "http://api.wotblitz.com",
         shortServerName: "NA",
-        portalPage: "http://wobtlitz.com",
+        portalPage: "http://wotblitz.com",
         mainLanguage: "en"
     },
     ASIA:{
         serverName: "South East Asia",
         apiDomain: "http://api.wotblitz.asia",
         shortServerName: "SEA",
-        portalPage: "http://wobtlitz.asia",
+        portalPage: "http://wotblitz.asia",
         mainLanguage: "en"
     },
     EU:{
         serverName: "European Server",
         apiDomain: "http://api.wotblitz.eu",
         shortServerName: "EU",
-        portalPage: "http://wobtlitz.eu",
+        portalPage: "http://wotblitz.eu",
         mainLanguage: "en"
     },
     RU:{
         serverName: "Russian Server",
         apiDomain: "http://api.wotblitz.ru",
         shortServerName: "RU",
-        portalPage: "http://wobtlitz.ru",
+        portalPage: "http://wotblitz.ru",
         mainLanguage: "ru"
     }
 };
 
-module.exports = Object.freeze(Region);
+//prevents modification to object
+module.exports = Object.freeze(region);
