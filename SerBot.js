@@ -30,10 +30,15 @@ const Parser = require('rss-parser');
 const request = require('./modules/request.js');
 
 //Import SerBot's small webservice
+const http = require('http');
+const https = require('https');
 const webService = require('./modules/link.js');
 
 //fs
 const fs = require('fs-extra');
+
+//util functions
+const utilFunc = require("./modules/util.js");
 
 //Keyart Requirements
 const sharp = require('sharp');
@@ -185,32 +190,6 @@ function numberWithCommas(x){
     return parts.join(".");
 }
 
-/**
- *
- * @return {Region}
- * @param {string} region
- */
-function areaDetermination(region){
-        if(region === undefined){
-            throw SerBotDetails.ErrorArray.Incorret_Server_Tag;
-        }
-        switch (region.toUpperCase()){
-            case 'NA':
-                return Region.NA;
-            case 'EU':
-            case 'EUROPE':
-                return Region.EU;
-            case 'ASIA':
-            case 'SEA':
-            case 'SA':
-                return Region.ASIA;
-            case 'RU':
-            case 'RUSSIAN':
-                return Region.RU;
-            default:
-                throw SerBotDetails.ErrorArray.Incorret_Server_Tag;
-        }
-}
 
 function errorReply(errorDetails, message,command){
     message.channel.send('',{
@@ -603,7 +582,7 @@ SerBot.on("message", async function(message) {
             //init time
             let day = (new Date().getTime() / 86400000).toFixed(0);
             //determine realm of the check
-            let realm = await areaDetermination(fullInput[1]);
+            let realm = await utilFunc.areaDetermination(fullInput[1]);
             //separate search string and command
             let stringCommand = {
                 search: fullInput[2],
@@ -856,7 +835,7 @@ SerBot.on("message", async function(message) {
             //init time
             let now = (new Date().getTime() / 86400000);
             //determine realm of the check
-            let realm = await areaDetermination(fullInput[1]);
+            let realm = await utilFunc.areaDetermination(fullInput[1]);
             //separate search string and command
             let stringCommand = {
                 search: fullInput[2],
@@ -1036,7 +1015,6 @@ SerBot.on("message", async function(message) {
                     fields: [
                         {name: `WN8`, value: `**${psdata.playerfinal.wn8.wn8.toFixed(0)} (${psdata.playerfinal.wn8.rating})**`, inline: true},
                         {name: 'WN7', value: `**${psdata.playerfinal.wn7.wn7.toFixed(0)} (${psdata.playerfinal.wn7.rating})**`, inline: true},
-                        {name: `MGR 2.2`, value: `**[${psdata.playerfinal.MGR.MGR.toFixed(2)} (${psdata.playerfinal.MGR.rating})](http://forum.wotblitz.ru/index.php?/topic/37499-mgr-%D0%B2%D1%81%D1%82%D1%80%D0%B5%D1%87%D0%B0%D0%B5%D0%BC-%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8E-mgr-22/#topmost)**`, inline: true},
                         {name: 'WG Personal Rating', value: `**${psdata.playerfinal.WGPR.toFixed(0)}**`},
                         {name: 'Battles', value: `**${psdata.playerfinal.battles}**`, inline: true},
                         {name: 'Winrate', value: `**${(psdata.playerfinal.wr * 100).toFixed(2)}%**`, inline: true},
@@ -1165,7 +1143,7 @@ SerBot.on("message", async function(message) {
                         return;
                 }
             }
-            let replayURL;
+            let replayURLs = [];
             let title;
 
             //search for replays
@@ -1175,7 +1153,7 @@ SerBot.on("message", async function(message) {
 
             //if the replay is in the message as url
             if (message.attachments.array()[0] === undefined) {
-                replayURL = fullInput[1];
+                replayURLs[0] = fullInput[1];
                 if(fullInput[2] === undefined){
                     title = undefined
                 } else {
@@ -1183,7 +1161,8 @@ SerBot.on("message", async function(message) {
                 }
             } else {
                 //if the replay is in the attachment
-                replayURL = message.attachments.array()[0].url;
+                replayURLs = message.attachments.array().map(x => x.url)
+                    .filter(x => x.endsWith("wotbreplay"));
                 if(fullInput[1] === undefined){
                     title = undefined
                 } else {
@@ -1191,15 +1170,18 @@ SerBot.on("message", async function(message) {
                 }
             }
 
+            console.log(replayURLs);
             //if the attachment is not a wotbreplay
-            if(!replayURL.endsWith("wotbreplay")){
+            if(replayURLs.length === 0){
                 throw SerBotDetails.ErrorArray.Missing_Attachment_Replay;
             }
 
             //now wait for the reply
             message.channel.startTyping();
-            const reply = await replay.uploadReplay(SerBot.user.avatarURL,replayURL,title);
-            message.channel.send(reply.content, reply);
+            replayURLs.map(async x => {
+                const reply = await replay.uploadReplay(SerBot.user.avatarURL,x,title);
+                message.channel.send(reply.content, reply);
+            });
 
             //usual logging
             SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} Uploaded Replays.`);
@@ -1220,22 +1202,26 @@ SerBot.on("message", async function(message) {
         }
     } else if (message.channel.type === "text" && replay.isReplayChannel(message.guild.id,message.channel.id)){
         try{
-            let replayURL = undefined;
+            let replayURLs = [];
             let title = undefined;
             if(message.attachments.array()[0] !== undefined){
-                if(message.attachments.array()[0].url.endsWith('.wotbreplay')){
-                    replayURL = message.attachments.array()[0].url;
-                    title = message.cleanContent;
-                }
+                replayURLs = message.attachments.array().map(x => x.url)
+                    .filter(x => x.endsWith('.wotbreplay'));
+                title = message.cleanContent;
             } else if (fullInput[0].endsWith('.wotbreplay')){
-                replayURL = fullInput[0];
+                replayURLs[0] = fullInput[0];
                 title = fullInput.slice(1).join(" ");
             }
-            if(replayURL !== undefined){
+
+
+            if(replayURLs.length !== 0 ){
                 message.channel.startTyping();
-                const reply = await replay.uploadReplay(SerBot.user.avatarURL,replayURL,title);
+                replayURLs.map(async x => {
+                    const reply = await replay.uploadReplay(SerBot.user.avatarURL,x,title);
+                    message.channel.send(reply.content, reply);
+                });
                 SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} Uploaded Replays via AUTOMATIC REPLAY DETECTION.`);
-                message.channel.send(reply.content, reply);
+
                 message.channel.stopTyping();
             }
         } catch (error){
@@ -1252,4 +1238,5 @@ SerBot.on('error', error => {
 
 SerBot.login(SerBotTokens.Token).then(console.log(`Login Successful! Initializing`));
 
-webService.webService.listen(3000);
+http.createServer(webService).listen(3000);
+https.createServer(webService).listen(3001);

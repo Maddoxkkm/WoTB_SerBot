@@ -61,6 +61,35 @@ function convertTime(ms){
     return timeArray.join(", ");
 }
 
+/**
+ *
+ * @return {Region}
+ * @param {string} region
+ */
+function areaDetermination(region){
+    const SerBotDetails = require('./serbot_details.js');
+    if(region === undefined){
+        throw SerBotDetails.ErrorArray.Incorret_Server_Tag;
+    }
+    switch (region.toUpperCase()){
+        case 'NA':
+            return Region.NA;
+        case 'EU':
+        case 'EUROPE':
+            return Region.EU;
+        case 'ASIA':
+        case 'SEA':
+        case 'SA':
+            return Region.ASIA;
+        case 'RU':
+        case 'RUSSIAN':
+            return Region.RU;
+        default:
+            throw SerBotDetails.ErrorArray.Incorret_Server_Tag;
+    }
+}
+
 
 exports.numberWithCommas = numberWithCommas;
 exports.convertTime = convertTime;
+exports.areaDetermination = areaDetermination;
