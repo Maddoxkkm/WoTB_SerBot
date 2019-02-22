@@ -67,6 +67,7 @@ function convertTime(ms){
  * @param {string} region
  */
 function areaDetermination(region){
+    const Region = require('./region.js');
     const SerBotDetails = require('./serbot_details.js');
     if(region === undefined){
         throw SerBotDetails.ErrorArray.Incorret_Server_Tag;

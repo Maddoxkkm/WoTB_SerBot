@@ -1015,6 +1015,7 @@ SerBot.on("message", async function(message) {
                     fields: [
                         {name: `WN8`, value: `**${psdata.playerfinal.wn8.wn8.toFixed(0)} (${psdata.playerfinal.wn8.rating})**`, inline: true},
                         {name: 'WN7', value: `**${psdata.playerfinal.wn7.wn7.toFixed(0)} (${psdata.playerfinal.wn7.rating})**`, inline: true},
+                        {name: `MGR 2.2`, value: `**[${psdata.playerfinal.MGR.MGR.toFixed(2)} (${psdata.playerfinal.MGR.rating})](http://forum.wotblitz.ru/index.php?/topic/37499-mgr-%D0%B2%D1%81%D1%82%D1%80%D0%B5%D1%87%D0%B0%D0%B5%D0%BC-%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8E-mgr-22/#topmost)**`, inline: true},
                         {name: 'WG Personal Rating', value: `**${psdata.playerfinal.WGPR.toFixed(0)}**`},
                         {name: 'Battles', value: `**${psdata.playerfinal.battles}**`, inline: true},
                         {name: 'Winrate', value: `**${(psdata.playerfinal.wr * 100).toFixed(2)}%**`, inline: true},
