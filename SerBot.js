@@ -71,7 +71,7 @@ function hasPermission(permission, messageObj){
  * Get WN8 data from BlitzStars
  */
 function getWN8(){
-    request.Request(`https://www.blitzstars.com/tankaverages.json`)
+    request.Request(`https://www.blitzstars.com/api/tankaverages.json`)
         .then(body => {
             let list = JSON.parse(body);
             let result = {};
