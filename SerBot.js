@@ -625,7 +625,7 @@ SerBot.on("message", async function(message) {
 
             //2nd API check
             let secondCheck = await request.WGApiCall(`${realm.apiDomain}/wotb/clans/info/?application_id=${SerBotTokens.Api_Token}&extra=members&clan_id=${csdata.clan_id}`);
-            //clam emblem id fix (custom emblems)
+            //clan emblem id fix (custom emblems)
             let secondResult = secondCheck.data[csdata.clan_id];
             //update the 2nd batch of results into the dedicated object
             Object.assign(csdata, {
@@ -636,6 +636,7 @@ SerBot.on("message", async function(message) {
                 motto: secondResult.motto,
                 creator: secondResult.creator_name,
                 emblem: secondResult.emblem_set_id,
+                emblem_url: 37 <= secondResult.emblem_set_id <= 47 ? `clan-logo+personal_0${secondResult.emblem_set_id-10}.png` : `clan-icon-v2-${secondResult.emblem_set_id}.png`
                 recruitment: secondResult.recruiting_policy
             });
             let tempMemberList = secondResult.members;
@@ -744,7 +745,7 @@ SerBot.on("message", async function(message) {
                                 name: `SerBot Clan Data Checking V2.0 - By SerBot`,
                                 icon_url: SerBot.user.avatarURL
                             },
-                            "thumbnail": {"url": `https://wotblitz-gc.gcdn.co/icons/clanEmblems2x/clan-icon-v2-${csdata.emblem}.png`},
+                            "thumbnail": {"url": `https://wotblitz-gc.gcdn.co/icons/clanEmblems2x/${csdata.emblem_url}`},
                             title: `Embeded Reply of Clan Statistics For [${csdata.clantag}], ${csdata.clanname}`,
                             description: `Clan Rating: ${csdata.clanFinal.rating}`,
                             fields: [
