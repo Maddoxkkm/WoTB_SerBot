@@ -636,7 +636,7 @@ SerBot.on("message", async function(message) {
                 motto: secondResult.motto,
                 creator: secondResult.creator_name,
                 emblem: secondResult.emblem_set_id,
-                emblem_url: 37 <= secondResult.emblem_set_id <= 47 ? `clan-logo+personal_0${secondResult.emblem_set_id-10}.png` : `clan-icon-v2-${secondResult.emblem_set_id}.png`
+                emblem_url: 37 <= secondResult.emblem_set_id <= 47 ? `clan-logo_personal_0${secondResult.emblem_set_id-10}.png` : `clan-icon-v2-${secondResult.emblem_set_id}.png`,
                 recruitment: secondResult.recruiting_policy
             });
             let tempMemberList = secondResult.members;
