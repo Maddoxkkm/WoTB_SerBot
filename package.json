@@ -9,7 +9,6 @@
     "node-gyp": "^3.7.0",
     "request": "^2.87.0",
     "rss-parser": "^3.4.2",
-    "sharp": "^0.19.1",
     "zip-dir": "^1.0.2"
   },
   "scripts": {
