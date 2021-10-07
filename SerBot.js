@@ -3,11 +3,6 @@ const SerBotTokens = require('./SerBot.json');
 const prefix = SerBotTokens.prefix;
 const commandInvoke = SerBotTokens.commandInvoke;
 
-//Load Enmap and the base
-const Enmap = require('enmap');
-const EnmapSQLite = require('enmap-sqlite');
-const guildSettingsData = new Enmap({ provider: new EnmapSQLite({ name: 'GuildSettings' }) });
-
 //Import Discord Module
 const Discord = require("discord.js");
 const SerBot = new Discord.Client({
@@ -41,7 +36,6 @@ const fs = require('fs-extra');
 const utilFunc = require("./modules/util.js");
 
 //Keyart Requirements
-const sharp = require('sharp');
 const zipdir = require('zip-dir');
 const util = require('util');
 const zip = util.promisify(zipdir);
@@ -108,12 +102,11 @@ function SetStatus () {
 
     ];
     const secondhalf = [
-        `in ${SerBot.guilds.size} servers`,
-        `serving ${SerBot.users.filter(x => !x.bot).size} users`
+        `in ${SerBot.guilds.cache.size} servers`,
     ];
     const status = `${firsthalf[Math.floor(Math.random()*firsthalf.length)]} | ${secondhalf[Math.floor(Math.random() * secondhalf.length)]}`;
     const presence = { game: { name: status, type: 0 } };
-    if(SerBot.presences.equals(presence)){
+    if(SerBot.user.presence.equals(presence)){
         SetStatus()
     } else {
         SerBot.user.setPresence(presence)
@@ -134,7 +127,7 @@ function Tankopedia(){
 
 
 SerBot.on("ready", () => {
-    SerbLog(`Ready to begin! Serving in ${SerBot.channels.size} channels, ${SerBot.guilds.size} servers and ${SerBot.users.filter(x => !x.bot).size} users`);
+    SerbLog(`Ready to begin! Serving in ${SerBot.channels.size} channels, ${SerBot.guilds.size} servers`);
     SetStatus();
     Tankopedia();
     getWN8();
@@ -310,13 +303,11 @@ SerBot.on("message", async function(message) {
                     {name:`Open Github Repository`, value:`[Maddoxkkm/WoTB_SerBot](https://github.com/Maddoxkkm/WoTB_SerBot)`},
                     {name:`Language of Bot`, value:`[Node.js](https://nodejs.org/en/)`, inline: true},
                     {name:`Discord API Library`, value:`[Discord.js](https://github.com/hydrabolt/discord.js)`, inline: true},
-                    {name:`Uptime of Bot`, value:`${ConvertTime(SerBot.uptime)}`, inline: true},
-                    //{name:`Library of Keyart Generation`, value:`[sharp](https://github.com/lovell/sharp)`, inline: true},
+                    {name:`Uptime of Bot`, value:`${ConvertTime(SerBot.uptime)} `, inline: true},
                     {name:`Player/Clan Stats provider`, value:`[WarGaming Open API](https://developers.wargaming.net/)`, inline: true},
                     {name:`WN8 Tank Average Values provider`, value:`[BlitzStars](https://www.blitzstars.com/)`, inline: true},
                     {name:`MGR 2.2 Tank Values provider`, value:`[Wblitz.net](http://wblitz.net/mgr/coeffs)`, inline: true},
-                    {name:`No. of Servers`, value:`${SerBot.guilds.size} Servers`, inline: true},
-                    {name:`No. of Users (Excluding Bots)`, value:`${SerBot.users.filter(x => !x.bot).size} Users`, inline: true},
+                    {name:`No. of Servers`, value:`${SerBot.guilds.cache.size} Servers`, inline: true},
                     {name:`To Support Maddox via Patreon`, value: `https://www.patreon.com/maddoxkkm`, inline: true}
                 ],
                 footer: {icon_url: SerBot.user.avatarURL, text: 'Maintaned by forever unreliable and Lazy™ Maddox.'}
@@ -496,7 +487,7 @@ SerBot.on("message", async function(message) {
         SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} has requested the Bot Uptime Data`);
         message.channel.send(``, {
             embed: {
-                description: `${SerBot.user.username} Uptime | ${ConvertTime(SerBot.uptime)}`,
+                description: `${SerBot.user.username} Uptime | ${ConvertTime(SerBot.uptime)} `,
                 color: 3097087
             }
         })
@@ -1120,31 +1111,6 @@ SerBot.on("message", async function(message) {
     //replays
     if (commandAliasCheck(fullInput,SerBotDetails.CommandArray.ReplaysArray)){
         try{
-            // for permanently watching the replays.
-            if(fullInput[1] !== undefined){
-                switch(fullInput[1].toLowerCase()){
-                    case "add":
-                    case "add-channel":
-                    case "addchannel":
-                        if (!hasPermission("MANAGE_GUILD",message)){throw SerBotDetails.ErrorArray.Insufficient_Permission_Server}
-                        if (await replay.addAutoChannel(message.guild.id, message.channel.id)){
-                            message.channel.send('',{embed: {description: `SerBot is now watching this channel, <#${message.channel.id}> for replays!`, color: 3097087}})
-                        } else {
-                            message.channel.send('', {embed: {description: `SerBot has already been watching this channel for replays!`, color: 16711680}})
-                        }
-                        return;
-                    case "remove":
-                    case "remove-channel":
-                    case "removechannel":
-                        if (!hasPermission("MANAGE_GUILD",message)){throw SerBotDetails.ErrorArray.Insufficient_Permission_Server}
-                        if (await replay.removeAutoChannel(message.guild.id, message.channel.id)){
-                            message.channel.send('',{embed: {description: `Channel <#${message.channel.id}>, is now removed from SerBot's automatic replays detection system!`, color: 3097087}})
-                        } else {
-                            message.channel.send('', {embed: {description: `SerBot isn't watching this channel for replays!`, color: 16711680}});
-                        }
-                        return;
-                }
-            }
             let replayURLs = [];
             let title;
 
@@ -1202,7 +1168,7 @@ SerBot.on("message", async function(message) {
                 errorReply(error, message, SerBotDetails.CommandArray.ReplaysArray)
             }
         }
-    } else if (message.channel.type === "text" && replay.isReplayChannel(message.guild.id,message.channel.id)){
+    } else {
         try{
             let replayURLs = [];
             let title = undefined;

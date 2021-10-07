@@ -2,11 +2,8 @@
   "name": "serbot",
   "version": "1.0.0",
   "dependencies": {
-    "discord.js": "^11.3.2",
-    "enmap": "^2.6.3",
-    "enmap-sqlite": "^2.0.3",
+    "discord.js": "^12.5.3",
     "fs-extra": "^5.0.0",
-    "node-gyp": "^3.7.0",
     "request": "^2.87.0",
     "rss-parser": "^3.4.2",
     "zip-dir": "^1.0.2"
@@ -17,7 +14,6 @@
   },
   "description": "This is a WORK IN PROGRESS. It is supposed to be a rewrite to the current in use SerBot which is written in tons of callback hell.",
   "main": "SerBot.js",
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MadWoTBMods/WoTB_SerBot.git"

@@ -1,88 +1,11 @@
 const medalList = require('./medal_replay.json');
 const player = require('./players.js');
 
-//Enmap loading
-const Enmap = require('enmap');
-const EnmapSQLite = require('enmap-sqlite');
-const autoUploadChannels = new Enmap({ provider: new EnmapSQLite({ name: 'GuildSettings' }) });
-
 //load request for uploading
 const request = require('./request.js');
 
 //other utils
 const util = require('./util.js');
-
-async function addAutoChannel(guildID, channelID){
-    try{
-        //whether the record itself exists.
-        if(autoUploadChannels.has(guildID)){
-            //whether the property exists
-            if(autoUploadChannels.hasProp(guildID,"replayChannelsArray")){
-                //whether it's already included in the list
-                if(!autoUploadChannels.getProp(guildID,"replayChannelsArray").includes(channelID)){
-                    //then add it
-                    autoUploadChannels.pushIn(guildID, "replayChannelsArray", channelID, false);
-                    return true;
-                }
-            } else {
-                //if property doesn't exist
-                autoUploadChannels.setProp(guildID,"replayChannelsArray", [channelID]);
-                return true;
-            }
-        } else {
-            //the record itself doesn't exist
-            await autoUploadChannels.setAsync(guildID, {replayChannelsArray: [channelID]});
-            return true;
-        }
-        return false;
-    } catch (err){
-        console.log(err, "Some error occured");
-        return false;
-    }
-}
-
-async function removeAutoChannel(guildID, channelID){
-    try{
-        //whether the record itself exists.
-        if(autoUploadChannels.has(guildID)){
-            //whether the property exists
-            if(autoUploadChannels.hasProp(guildID,"replayChannelsArray")){
-                //whether it's actually included in the list
-                let replayChannelsArray = autoUploadChannels.getProp(guildID,"replayChannelsArray");
-                if(replayChannelsArray.includes(channelID)){
-                    //then remove it
-                    autoUploadChannels.removeFrom(guildID,"replayChannelsArray", channelID.toString());
-                    return true;
-                }
-            } else {
-                //if property doesn't exist
-                autoUploadChannels.setProp(guildID,"replayChannelsArray", []);
-            }
-        } else {
-            //the record itself doesn't exist
-            await autoUploadChannels.setAsync(guildID, {replayChannelsArray: []})
-        }
-        return false;
-    } catch (err){
-        console.log(err, "Some error occured");
-        return false;
-    }
-}
-
-function isReplayChannel(guildID, channelID){
-    try{
-        if(autoUploadChannels.has(guildID)){
-            let replayChannelsArray = autoUploadChannels.getProp(guildID, "replayChannelsArray");
-            if (replayChannelsArray.includes(channelID)){
-                return true;
-            }
-        }
-        return false;
-    } catch (err){
-        console.log(err, "Error Occured when checking whether channel is replayChannel");
-        return false;
-    }
-}
 
 function uploadReplay(icon, url, title = undefined){
     return new Promise(async function(resolve, reject){
@@ -267,7 +190,4 @@ function uploadReplay(icon, url, title = undefined){
     })
 }
 
-exports.removeAutoChannel = removeAutoChannel;
-exports.isReplayChannel = isReplayChannel;
-exports.addAutoChannel = addAutoChannel;
 exports.uploadReplay = uploadReplay;
