@@ -127,13 +127,13 @@ function Tankopedia(){
 
 
 SerBot.on("ready", () => {
-    SerbLog(`Ready to begin! Serving in ${SerBot.channels.size} channels, ${SerBot.guilds.size} servers`);
+    SerbLog(`Ready to begin! Serving in ${SerBot.channels.cache.size} channels, ${SerBot.guilds.cache.size} servers`);
     SetStatus();
     Tankopedia();
     getWN8();
 });
 SerBot.setInterval(() => {
-    SerbLog(`Serving in ${SerBot.channels.size} channels, ${SerBot.guilds.size} servers and ${SerBot.users.filter(x => !x.bot).size} users`);
+    SerbLog(`Serving in ${SerBot.channels.cache.size} channels, ${SerBot.guilds.cache.size} servers, currently has ${SerBot.users.cache.size} cached users.`);
     SetStatus();
 }, 900000);
 SerBot.setInterval(() => {
