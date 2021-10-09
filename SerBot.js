@@ -50,21 +50,21 @@ const stats = require('./modules/ratings');
 const SerBotDetails = require('./modules/serbot_details.js');
 
 //when bot got disconnected
-SerBot.on("disconnected", function(){
+SerBot.on("disconnected", function () {
     SerbLog("Disconnected!");
     process.exit();
 });
 
 //check for member permission
-function hasPermission(permission, messageObj){
-    return messageObj.member.hasPermission(permission,false,true,true)
+function hasPermission(permission, messageObj) {
+    return messageObj.member.hasPermission(permission, false, true, true)
 }
 
 
 /**
  * Get WN8 data from BlitzStars
  */
-function getWN8(){
+function getWN8() {
     request.Request(`https://www.blitzstars.com/api/tankaverages.json`)
         .then(body => {
             let list = JSON.parse(body);
@@ -74,28 +74,29 @@ function getWN8(){
                     wr: x.all.wins * 100 / x.all.battles,
                     dmg: x.all.damage_dealt / x.all.battles,
                     spot: x.all.spotted / x.all.battles,
-                    frag: x.all.frags/ x.all.battles,
-                    def: x.all.dropped_capture_points / x.all.battles};
+                    frag: x.all.frags / x.all.battles,
+                    def: x.all.dropped_capture_points / x.all.battles
+                };
             });
             fs.writeFileSync('BlitzStars.json', JSON.stringify(result, null, 2));
             SerbLog('Average Tank Data Updated!');
-        },function(){SerbLog('Average Tank Data Update failed!')});
+        }, function () { SerbLog('Average Tank Data Update failed!') });
 }
 
 /**
  * //Set Status + Tank Array Module + Updating it
  */
-function SetStatus () {
+function SetStatus() {
     const firsthalf = [
         `Nerfing Germans`,
         `Mining Stalinium™`,
-        `${prefix.toLowerCase()+SerBotDetails.CommandArray.HelpArray.command[0].toLowerCase()}`,
+        `${prefix.toLowerCase() + SerBotDetails.CommandArray.HelpArray.command[0].toLowerCase()}`,
         `"Balancing"™`,
         `Improving Russian Bias™`,
-        `${prefix.toLowerCase()+SerBotDetails.CommandArray.HelpArray.command[0].toLowerCase()}`,
+        `${prefix.toLowerCase() + SerBotDetails.CommandArray.HelpArray.command[0].toLowerCase()}`,
         `Breaking RNG`,
         `How Terrible`,
-        `${prefix.toLowerCase()+SerBotDetails.CommandArray.HelpArray.command[0].toLowerCase()}`,
+        `${prefix.toLowerCase() + SerBotDetails.CommandArray.HelpArray.command[0].toLowerCase()}`,
         `Powered by Vodka`,
         `"Insufficient Loyalty"™`,
         `Supporting Replays`
@@ -104,9 +105,9 @@ function SetStatus () {
     const secondhalf = [
         `in ${SerBot.guilds.cache.size} servers`,
     ];
-    const status = `${firsthalf[Math.floor(Math.random()*firsthalf.length)]} | ${secondhalf[Math.floor(Math.random() * secondhalf.length)]}`;
+    const status = `${firsthalf[Math.floor(Math.random() * firsthalf.length)]} | ${secondhalf[Math.floor(Math.random() * secondhalf.length)]}`;
     const presence = { game: { name: status, type: 0 } };
-    if(SerBot.user.presence.equals(presence)){
+    if (SerBot.user.presence.equals(presence)) {
         SetStatus()
     } else {
         SerBot.user.setPresence(presence)
@@ -117,12 +118,12 @@ function SetStatus () {
 /**
  * grab Tankopedia
  */
-function Tankopedia(){
+function Tankopedia() {
     request.Request(`http://api.wotblitz.asia/wotb/encyclopedia/vehicles/?application_id=${SerBotTokens.Api_Token}&fields=tier%2Cname`)
         .then(body => {
             fs.writeFileSync('TankArray.json', body);
             SerbLog('Tank Information Updated!');
-        },() => {SerbLog('Tank Information Update failed!')});
+        }, () => { SerbLog('Tank Information Update failed!') });
 }
 
 
@@ -167,8 +168,8 @@ const helpCommandArray = Object.keys(SerBotDetails.CommandArray)
 if (helpCommandArray.length === 0) {
     SerbLog('Help Command Function Failed to Initialize!')
 } else {
-        SerbLog('Help Command Function Ready!')
-    }
+    SerbLog('Help Command Function Ready!')
+}
 // end of Help Function Module
 
 
@@ -177,24 +178,24 @@ if (helpCommandArray.length === 0) {
  * @param {integer} x 
  * @return {string}
  */
-function numberWithCommas(x){
+function numberWithCommas(x) {
     let parts = x.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
 }
 
 
-function errorReply(errorDetails, message,command){
-    message.channel.send('',{
+function errorReply(errorDetails, message, command) {
+    message.channel.send('', {
         embed: {
             color: 16711680,
-            author:{
+            author: {
                 name: SerBot.user.username,
                 icon_url: SerBot.user.avatarURL
             },
             title: errorDetails.catagory,
             description: `Reason: ${errorDetails.reason}`,
-            fields:[
+            fields: [
                 {
                     name: prefix + command.example,
                     value: command.usage
@@ -203,16 +204,18 @@ function errorReply(errorDetails, message,command){
         }
     })
         .then(SerbLog(`The User ${message.author.username} From ${message.guild} at ${message.channel.name} has attempted to ${command.action} but failed due to ${errorDetails.console_reason}. Request String: ${message.content}`),
-            (error) => {message.channel.send(`\`\`\`${errorDetails.catagory}\n${errorDetails.reason}\n\nCommand Usage for: ${prefix + command.example}\n${command.usage}\n\nNote: Please Enable >Embed Links< Permission for SerBot for Better-Looking Embed Reply!\`\`\``);
-            SerbLog(`${error}: Embed Not Enabled!`)});
+            (error) => {
+                message.channel.send(`\`\`\`${errorDetails.catagory}\n${errorDetails.reason}\n\nCommand Usage for: ${prefix + command.example}\n${command.usage}\n\nNote: Please Enable >Embed Links< Permission for SerBot for Better-Looking Embed Reply!\`\`\``);
+                SerbLog(`${error}: Embed Not Enabled!`)
+            });
     message.channel.stopTyping();
     afterTypingCheck(message.channel);
 }
 
-function commandAliasCheck(input, commandArray){
+function commandAliasCheck(input, commandArray) {
     let equal = false;
     commandArray.command.map(x => {
-        if (input[0].toUpperCase() === `${prefix.toUpperCase()}${x.toUpperCase()}`){
+        if (input[0].toUpperCase() === `${prefix.toUpperCase()}${x.toUpperCase()}`) {
             equal = true;
             return x
         }
@@ -220,12 +223,12 @@ function commandAliasCheck(input, commandArray){
     return equal
 }
 
-function afterTypingCheck(channel){
-    setTimeout(()=>{
-        if(SerBot.user.typingDurationIn(channel) > 9000){
+function afterTypingCheck(channel) {
+    setTimeout(() => {
+        if (SerBot.user.typingDurationIn(channel) > 9000) {
             channel.stopTyping(true)
         }
-    },9000)
+    }, 9000)
 }
 
 
@@ -235,7 +238,7 @@ function afterTypingCheck(channel){
  * @return {string} a String descripting the time in human readable format.
  * @constructor
  */
-function ConvertTime(ms){
+function ConvertTime(ms) {
     let timeArray = [];
     let temp = Math.floor(ms / 1000);
     let sec = temp % 60;
@@ -246,32 +249,32 @@ function ConvertTime(ms){
     temp = Math.floor(temp / 24);
     let days = temp;
 
-    if(days !== 0){
-        if(days === 1){
+    if (days !== 0) {
+        if (days === 1) {
             timeArray.push("1 Day")
         } else {
             timeArray.push(`${days} Days`)
         }
     }
 
-    if(hrs !== 0){
-        if(hrs === 1){
+    if (hrs !== 0) {
+        if (hrs === 1) {
             timeArray.push("1 Hour")
         } else {
             timeArray.push(`${hrs} Hours`)
         }
     }
 
-    if(min !== 0){
-        if(min === 1){
+    if (min !== 0) {
+        if (min === 1) {
             timeArray.push("1 Minute")
         } else {
             timeArray.push(`${min} Minutes`)
         }
     }
 
-    if(sec !== 0){
-        if(days === 1){
+    if (sec !== 0) {
+        if (days === 1) {
             timeArray.push("1 Second")
         } else {
             timeArray.push(`${sec} Seconds`)
@@ -281,7 +284,7 @@ function ConvertTime(ms){
 }
 
 //Main SerBot
-SerBot.on("message", async function(message) {
+SerBot.on("message", async function (message) {
     let fullInput = message.cleanContent.split(" ");
 
     //command to restart bot with help of PM2: '!bot logoff'
@@ -291,26 +294,26 @@ SerBot.on("message", async function(message) {
     }
 
     //About Reply
-    if (commandAliasCheck(fullInput,SerBotDetails.CommandArray.AboutArray)){
+    if (commandAliasCheck(fullInput, SerBotDetails.CommandArray.AboutArray)) {
         message.channel.send('', {
             embed: {
                 color: 3097087,
-                author: {name: 'SerBot News', icon_url: SerBot.user.avatarURL},
-                thumbnail:{url: SerBot.user.avatarURL},
-                title: `About SerBot.` ,
+                author: { name: 'SerBot News', icon_url: SerBot.user.avatarURL },
+                thumbnail: { url: SerBot.user.avatarURL },
+                title: `About SerBot.`,
                 description: `Created by Maddox#0438`,
                 fields: [
-                    {name:`Open Github Repository`, value:`[Maddoxkkm/WoTB_SerBot](https://github.com/Maddoxkkm/WoTB_SerBot)`},
-                    {name:`Language of Bot`, value:`[Node.js](https://nodejs.org/en/)`, inline: true},
-                    {name:`Discord API Library`, value:`[Discord.js](https://github.com/hydrabolt/discord.js)`, inline: true},
-                    {name:`Uptime of Bot`, value:`${ConvertTime(SerBot.uptime)} `, inline: true},
-                    {name:`Player/Clan Stats provider`, value:`[WarGaming Open API](https://developers.wargaming.net/)`, inline: true},
-                    {name:`WN8 Tank Average Values provider`, value:`[BlitzStars](https://www.blitzstars.com/)`, inline: true},
-                    {name:`MGR 2.2 Tank Values provider`, value:`[Wblitz.net](http://wblitz.net/mgr/coeffs)`, inline: true},
-                    {name:`No. of Servers`, value:`${SerBot.guilds.cache.size} Servers`, inline: true},
-                    {name:`To Support Maddox via Patreon`, value: `https://www.patreon.com/maddoxkkm`, inline: true}
+                    { name: `Open Github Repository`, value: `[Maddoxkkm/WoTB_SerBot](https://github.com/Maddoxkkm/WoTB_SerBot)` },
+                    { name: `Language of Bot`, value: `[Node.js](https://nodejs.org/en/)`, inline: true },
+                    { name: `Discord API Library`, value: `[Discord.js](https://github.com/hydrabolt/discord.js)`, inline: true },
+                    { name: `Uptime of Bot`, value: `${ConvertTime(SerBot.uptime)} `, inline: true },
+                    { name: `Player/Clan Stats provider`, value: `[WarGaming Open API](https://developers.wargaming.net/)`, inline: true },
+                    { name: `WN8 Tank Average Values provider`, value: `[BlitzStars](https://www.blitzstars.com/)`, inline: true },
+                    { name: `MGR 2.2 Tank Values provider`, value: `[Wblitz.net](http://wblitz.net/mgr/coeffs)`, inline: true },
+                    { name: `No. of Servers`, value: `${SerBot.guilds.cache.size} Servers`, inline: true },
+                    { name: `To Support Maddox via Patreon`, value: `https://www.patreon.com/maddoxkkm`, inline: true }
                 ],
-                footer: {icon_url: SerBot.user.avatarURL, text: 'Maintaned by forever unreliable and Lazy™ Maddox.'}
+                footer: { icon_url: SerBot.user.avatarURL, text: 'Maintaned by forever unreliable and Lazy™ Maddox.' }
             }
         });
         SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} Requested "About SerBot".`);
@@ -318,24 +321,26 @@ SerBot.on("message", async function(message) {
     }
 
     //RSS News Feed
-    if (commandAliasCheck(fullInput,SerBotDetails.CommandArray.BotNewsArray)){
-        try{
+    if (commandAliasCheck(fullInput, SerBotDetails.CommandArray.BotNewsArray)) {
+        try {
             message.channel.startTyping();
             let parser = new Parser();
             let feed = await parser.parseURL('https://madwotbmod.wordpress.com/category/serbot/feed/');
             message.channel.send('', {
                 embed: {
                     color: 3097087,
-                    author: {name: 'SerBot News', icon_url: SerBot.user.avatarURL},
-                    thumbnail:{url: SerBot.user.avatarURL},
-                    title: `Embeded Reply of SerBot's Latest Update and News` ,
+                    author: { name: 'SerBot News', icon_url: SerBot.user.avatarURL },
+                    thumbnail: { url: SerBot.user.avatarURL },
+                    title: `Embeded Reply of SerBot's Latest Update and News`,
                     fields: feed.items.filter(item => item.categories.includes('SerBot'))
                         .map(item => {
-                            return{
+                            return {
                                 name: `${item.title}(${item.link})`,
-                                value: `${item.content.split('&#8230;')[0]}...`};
-                        }).slice(0,5),
-                    footer: {icon_url: SerBot.user.avatarURL, text: 'Provided by The Forever Loyal SerBot™'
+                                value: `${item.content.split('&#8230;')[0]}...`
+                            };
+                        }).slice(0, 5),
+                    footer: {
+                        icon_url: SerBot.user.avatarURL, text: 'Provided by The Forever Loyal SerBot™'
                     }
                 }
             });
@@ -343,7 +348,7 @@ SerBot.on("message", async function(message) {
             afterTypingCheck(message.channel);
             SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} Requested SerBot Update News.`);
         }
-        catch (error){
+        catch (error) {
             errorReply(SerBotDetails.ErrorArray.Unexpected_Error, message, SerBotDetails.CommandArray.BotNewsArray);
         }
     }
@@ -445,13 +450,13 @@ SerBot.on("message", async function(message) {
     // }
 
     //Basic Ping-Ping
-    if (commandAliasCheck(fullInput,SerBotDetails.CommandArray.PingArray)) {
+    if (commandAliasCheck(fullInput, SerBotDetails.CommandArray.PingArray)) {
         SerbLog(`pong-ed the message from ${message.author.username} From ${message.guild} at Channel #${message.channel.name}`);
-        message.reply('pong!', {tts: true});
+        message.reply('pong!', { tts: true });
     }
 
     //Invitation Module
-    if (commandAliasCheck(fullInput,SerBotDetails.CommandArray.InviteArray)) {
+    if (commandAliasCheck(fullInput, SerBotDetails.CommandArray.InviteArray)) {
         SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} has requested the Invitation link`);
         if (message.guild !== null) {
             message.channel.send(``, {
@@ -462,28 +467,28 @@ SerBot.on("message", async function(message) {
             });
         }
         message.author.send('', {
-                embed: {
-                    color: 3097087,
-                    author: {
-                        name: SerBot.user.username,
-                        icon_url: SerBot.user.avatarURL
-                    },
-                    title: 'Invitation Link',
-                    url: `https://discordapp.com/oauth2/authorize?&client_id=${SerBot.user.id}&scope=bot&permissions=16392`,
-                    description: `Click on the Invitation Link to invite SerBot to your Server!\nhttps://discordapp.com/oauth2/authorize?&client_id=${SerBot.user.id}&scope=bot&permissions=16392`,
-                    fields: [
-                        {
-                            name: 'Permission',
-                            value: 'Make sure to give him **Embed Links** Permission for Beautiful Embed Message Blocks Reply, just like this one!\n\nIf you are too lazy to manage permissions then simply give SerBot Administrator permissions instead to bypass all restrictions to send Embed messages. \n\nThis Bot ***DOES NOT LOG MESSAGES NOR HAS THE CODE TO CONDUCT ANY Administrator actions***.'
-                        }
-                    ]
-                }
+            embed: {
+                color: 3097087,
+                author: {
+                    name: SerBot.user.username,
+                    icon_url: SerBot.user.avatarURL
+                },
+                title: 'Invitation Link',
+                url: `https://discordapp.com/oauth2/authorize?&client_id=${SerBot.user.id}&scope=bot&permissions=16392`,
+                description: `Click on the Invitation Link to invite SerBot to your Server!\nhttps://discordapp.com/oauth2/authorize?&client_id=${SerBot.user.id}&scope=bot&permissions=16392`,
+                fields: [
+                    {
+                        name: 'Permission',
+                        value: 'Make sure to give him **Embed Links** Permission for Beautiful Embed Message Blocks Reply, just like this one!\n\nIf you are too lazy to manage permissions then simply give SerBot Administrator permissions instead to bypass all restrictions to send Embed messages. \n\nThis Bot ***DOES NOT LOG MESSAGES NOR HAS THE CODE TO CONDUCT ANY Administrator actions***.'
+                    }
+                ]
             }
+        }
         )
     }
 
     //Uptime Module
-    if (commandAliasCheck(fullInput,SerBotDetails.CommandArray.UptimeArray)) {
+    if (commandAliasCheck(fullInput, SerBotDetails.CommandArray.UptimeArray)) {
         SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} has requested the Bot Uptime Data`);
         message.channel.send(``, {
             embed: {
@@ -494,7 +499,7 @@ SerBot.on("message", async function(message) {
     }
 
     //Help Function
-    if (commandAliasCheck(fullInput,SerBotDetails.CommandArray.HelpArray)) {
+    if (commandAliasCheck(fullInput, SerBotDetails.CommandArray.HelpArray)) {
         SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} has requested the Help file.`);
         if (message.guild !== null) {
             message.channel.send(``, {
@@ -519,24 +524,26 @@ SerBot.on("message", async function(message) {
     }
 
     //Server Population Module
-    if (commandAliasCheck(fullInput,SerBotDetails.CommandArray.SPArray)) {
+    if (commandAliasCheck(fullInput, SerBotDetails.CommandArray.SPArray)) {
         try {
             message.channel.startTyping();
             Promise.all([request.WGApiCall(`http://api.worldoftanks.asia/wgn/servers/info/?application_id=${SerBotTokens.Api_Token}`), request.WGApiCall(`http://api.worldoftanks.com/wgn/servers/info/?application_id=${SerBotTokens.Api_Token}`), request.WGApiCall(`http://api.worldoftanks.eu/wgn/servers/info/?application_id=${SerBotTokens.Api_Token}`), request.WGApiCall(`http://api.worldoftanks.ru/wgn/servers/info/?application_id=${SerBotTokens.Api_Token}`)])
                 .then(result => {
                     console.log(result);
                     let flattendata = [];
-                    result.map(x => {if (x.data.wotb === undefined) {
+                    result.map(x => {
+                        if (x.data.wotb === undefined) {
 
-                    } else {
-                        x.data.wotb.map (y => {
-                            flattendata.push({
-                                name: `For ${y.server} Server:`,
-                                value: `${y.players_online} Players Online`,
-                                inline: true
+                        } else {
+                            x.data.wotb.map(y => {
+                                flattendata.push({
+                                    name: `For ${y.server} Server:`,
+                                    value: `${y.players_online} Players Online`,
+                                    inline: true
+                                })
                             })
-                        })
-                    }});
+                        }
+                    });
                     SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} checked Server Population Data`);
                     message.channel.send(``, {
                         embed: {
@@ -547,7 +554,7 @@ SerBot.on("message", async function(message) {
                             },
                             title: `Server Population Data for WoTB Servers`,
                             fields: flattendata,
-                            footer: {icon_url: SerBot.user.avatarURL, text: 'Provided by the Forever Loyal SerBot™'}
+                            footer: { icon_url: SerBot.user.avatarURL, text: 'Provided by the Forever Loyal SerBot™' }
                         }
                     });
                 });
@@ -567,7 +574,7 @@ SerBot.on("message", async function(message) {
     }
 
     //Clan Stats Function
-    if (commandAliasCheck(fullInput,SerBotDetails.CommandArray.CSArray)) {
+    if (commandAliasCheck(fullInput, SerBotDetails.CommandArray.CSArray)) {
         try {
             message.channel.startTyping();
             //init time
@@ -579,10 +586,10 @@ SerBot.on("message", async function(message) {
                 search: fullInput[2],
                 command: fullInput.slice(3).join(" ")
             };
-            if(stringCommand.search === undefined){
+            if (stringCommand.search === undefined) {
                 throw (SerBotDetails.ErrorArray.Short_Search_String)
             }
-            if(stringCommand.search.length < 2){
+            if (stringCommand.search.length < 2) {
                 throw (SerBotDetails.ErrorArray.Short_Search_String)
             }
             //commands
@@ -627,7 +634,7 @@ SerBot.on("message", async function(message) {
                 motto: secondResult.motto,
                 creator: secondResult.creator_name,
                 emblem: secondResult.emblem_set_id,
-                emblem_url: 37 <= secondResult.emblem_set_id <= 47 ? `clan-logo_personal_0${secondResult.emblem_set_id-10}.png` : `clan-icon-v2-${secondResult.emblem_set_id}.png`,
+                emblem_url: 37 <= secondResult.emblem_set_id <= 47 ? `clan-logo_personal_0${secondResult.emblem_set_id - 10}.png` : `clan-icon-v2-${secondResult.emblem_set_id}.png`,
                 recruitment: secondResult.recruiting_policy
             });
             let tempMemberList = secondResult.members;
@@ -698,29 +705,29 @@ SerBot.on("message", async function(message) {
             };
             //clan classification
             if (csdata.memberArray.length < 10) {
-                Object.assign(csdata.clanFinal, {color: 16777215, rating: `Unrated Clan`})
+                Object.assign(csdata.clanFinal, { color: 16777215, rating: `Unrated Clan` })
             } else {
                 switch (true) {
                     case (csdata.clanFinal.wr >= 66):
-                        Object.assign(csdata.clanFinal, {color: 5577355, rating: `___**Super Unicum Clan**___`});
+                        Object.assign(csdata.clanFinal, { color: 5577355, rating: `___**Super Unicum Clan**___` });
                         break;
                     case (csdata.clanFinal.wr >= 61 && csdata.clanFinal.wr < 66):
-                        Object.assign(csdata.clanFinal, {color: 14090495, rating: `___**Unicum Clan**___`});
+                        Object.assign(csdata.clanFinal, { color: 14090495, rating: `___**Unicum Clan**___` });
                         break;
                     case (csdata.clanFinal.wr >= 57 && csdata.clanFinal.wr < 61):
-                        Object.assign(csdata.clanFinal, {color: 37887, rating: `___**Great Clan**___`});
+                        Object.assign(csdata.clanFinal, { color: 37887, rating: `___**Great Clan**___` });
                         break;
                     case (csdata.clanFinal.wr >= 54 && csdata.clanFinal.wr < 57):
-                        Object.assign(csdata.clanFinal, {color: 65535, rating: `___**Very Good Clan**___`});
+                        Object.assign(csdata.clanFinal, { color: 65535, rating: `___**Very Good Clan**___` });
                         break;
                     case (csdata.clanFinal.wr >= 51 && csdata.clanFinal.wr < 54):
-                        Object.assign(csdata.clanFinal, {color: 29184, rating: `___**Good Clan**___`});
+                        Object.assign(csdata.clanFinal, { color: 29184, rating: `___**Good Clan**___` });
                         break;
                     case (csdata.clanFinal.wr >= 48 && csdata.clanFinal.wr < 51):
-                        Object.assign(csdata.clanFinal, {color: 65280, rating: `___**Average Clan**___`});
+                        Object.assign(csdata.clanFinal, { color: 65280, rating: `___**Average Clan**___` });
                         break;
                     case (csdata.clanFinal.wr < 48):
-                        Object.assign(csdata.clanFinal, {color: 16777215, rating: `Unrated Clan`});
+                        Object.assign(csdata.clanFinal, { color: 16777215, rating: `Unrated Clan` });
                         break;
                 }
             }
@@ -730,30 +737,30 @@ SerBot.on("message", async function(message) {
             message.channel.send(`\`\`\`\nSerBot Clan Data Checking V2.0\n===========================\nClan Name   : ${csdata.clanname} [${csdata.clantag}] ${special} From ${realm.serverName}\nCreator     : ${csdata.creator}\nClan Leader : ${csdata.leader}\n\nDate of Creation : ${csdata.createddate}\n\nClan Motto : ${csdata.motto}\nClan Description : ${csdata.description}\n===========================\nNote: If you don't see the embeded message with Clan Statistics below this line, please Enable >Embed Links< Permission For SerBot!\`\`\``,
                 {
                     embed:
-                        {
-                            color: csdata.clanFinal.color,
-                            author: {
-                                name: `SerBot Clan Data Checking V2.0 - By SerBot`,
-                                icon_url: SerBot.user.avatarURL
-                            },
-                            "thumbnail": {"url": `https://wotblitz-gc.gcdn.co/icons/clanEmblems2x/${csdata.emblem_url}`},
-                            title: `Embeded Reply of Clan Statistics For [${csdata.clantag}], ${csdata.clanname}`,
-                            description: `Clan Rating: ${csdata.clanFinal.rating}`,
-                            fields: [
-                                {name: 'Member Count', value: `**${csdata.memberArray.length}**`, inline: true},
-                                {name: 'Average Winrate', value: `**${csdata.clanFinal.wr}%**`, inline: true},
-                                {name: 'Average Damage', value: `**${csdata.clanFinal.average_dmg}**`, inline: true},
-                                {name: 'Average Battles', value: `**${csdata.clanFinal.battles}**`, inline: true},
-                                {name: 'Battles Per Day', value: `**${csdata.clanFinal.bpd}**`, inline: true},
-                                {name: 'Damage Ratio', value: `**${csdata.clanFinal.dmg_ratio}**`, inline: true},
-                                {
-                                    name: 'Clan Damage Total',
-                                    value: `**${numberWithCommas(csdata.clanTotal.damage)}**`,
-                                    inline: true
-                                }],
-                            timestamp: new Date(csdata.created_at),
-                            footer: {icon_url: SerBot.user.avatarURL, text: 'Detailed Time of Clan Creation'}
-                        }
+                    {
+                        color: csdata.clanFinal.color,
+                        author: {
+                            name: `SerBot Clan Data Checking V2.0 - By SerBot`,
+                            icon_url: SerBot.user.avatarURL
+                        },
+                        "thumbnail": { "url": `https://wotblitz-gc.gcdn.co/icons/clanEmblems2x/${csdata.emblem_url}` },
+                        title: `Embeded Reply of Clan Statistics For [${csdata.clantag}], ${csdata.clanname}`,
+                        description: `Clan Rating: ${csdata.clanFinal.rating}`,
+                        fields: [
+                            { name: 'Member Count', value: `**${csdata.memberArray.length}**`, inline: true },
+                            { name: 'Average Winrate', value: `**${csdata.clanFinal.wr}%**`, inline: true },
+                            { name: 'Average Damage', value: `**${csdata.clanFinal.average_dmg}**`, inline: true },
+                            { name: 'Average Battles', value: `**${csdata.clanFinal.battles}**`, inline: true },
+                            { name: 'Battles Per Day', value: `**${csdata.clanFinal.bpd}**`, inline: true },
+                            { name: 'Damage Ratio', value: `**${csdata.clanFinal.dmg_ratio}**`, inline: true },
+                            {
+                                name: 'Clan Damage Total',
+                                value: `**${numberWithCommas(csdata.clanTotal.damage)}**`,
+                                inline: true
+                            }],
+                        timestamp: new Date(csdata.created_at),
+                        footer: { icon_url: SerBot.user.avatarURL, text: 'Detailed Time of Clan Creation' }
+                    }
                 });
 
             //members Command (pending improvement)
@@ -775,17 +782,17 @@ SerBot.on("message", async function(message) {
                 message.channel.send(``,
                     {
                         embed:
-                            {
-                                color: csdata.clanFinal.color,
-                                author: {
-                                    name: `SerBot Clan Data Checking V2.0, Members List Module - By SerBot`,
-                                    icon_url: SerBot.user.avatarURL
-                                },
-                                "thumbnail": {"url": `http://dl-wotblitz-gc.wargaming.net/icons/clanIcons2x/clan-icon-v2-${csdata.emblem}.png`},
-                                title: `Embeded Reply of Clan Member Statistics For [${csdata.clantag}], ${csdata.clanname}`,
-                                fields: arried,
-                                footer: {icon_url: SerBot.user.avatarURL, text: 'Provided by the Forever Loyal SerBot™'}
-                            }
+                        {
+                            color: csdata.clanFinal.color,
+                            author: {
+                                name: `SerBot Clan Data Checking V2.0, Members List Module - By SerBot`,
+                                icon_url: SerBot.user.avatarURL
+                            },
+                            "thumbnail": { "url": `http://dl-wotblitz-gc.wargaming.net/icons/clanIcons2x/clan-icon-v2-${csdata.emblem}.png` },
+                            title: `Embeded Reply of Clan Member Statistics For [${csdata.clantag}], ${csdata.clanname}`,
+                            fields: arried,
+                            footer: { icon_url: SerBot.user.avatarURL, text: 'Provided by the Forever Loyal SerBot™' }
+                        }
                     })
                     .catch(error => {
                         message.channel.send(`Failed to Return Member list due to: ${error}`);
@@ -821,7 +828,7 @@ SerBot.on("message", async function(message) {
     }
 
     //Player Stats Function
-    if (commandAliasCheck(fullInput,SerBotDetails.CommandArray.PSArray)) {
+    if (commandAliasCheck(fullInput, SerBotDetails.CommandArray.PSArray)) {
         try {
             message.channel.startTyping();
             //init time
@@ -833,10 +840,10 @@ SerBot.on("message", async function(message) {
                 search: fullInput[2],
                 command: fullInput.slice(3).join(" ")
             };
-            if(stringCommand.search === undefined){
+            if (stringCommand.search === undefined) {
                 throw (SerBotDetails.ErrorArray.Short_Search_String)
             }
-            if(stringCommand.search.length < 3){
+            if (stringCommand.search.length < 3) {
                 throw (SerBotDetails.ErrorArray.Short_Search_String)
             }
             //commands
@@ -912,7 +919,7 @@ SerBot.on("message", async function(message) {
             //3rd API Check (WN8, WN7 and MGR 2.2 (excluding platoon wins) Implementation)
             let thirdCheck = await request.WGApiCall(`${realm.apiDomain}/wotb/tanks/stats/?application_id=71df07a3f5c764028c167d09eec0cd99&account_id=${psdata.acc_id}&fields=all.spotted%2C+all.frags%2C+all.wins%2C+all.battles%2C+all.damage_dealt%2C+all.damage_received%2C+all.dropped_capture_points%2C+all.survived_battles%2C+tank_id`);
             let thirdResult = thirdCheck.data[psdata.acc_id];
-            if(thirdResult === null){
+            if (thirdResult === null) {
                 throw (SerBotDetails.ErrorArray.No_Battles)
             }
             //load them into "tank_data" first
@@ -924,7 +931,7 @@ SerBot.on("message", async function(message) {
                     total.battles += x.all.battles;
                 }
                 return total
-            }, {tier: 0, battles: 0});
+            }, { tier: 0, battles: 0 });
             psdata.playerfinal.avgTier = tiertank.tier / tiertank.battles;
             //
             psdata.playerfinal.tanks_data = thirdResult.map(x => {
@@ -968,7 +975,7 @@ SerBot.on("message", async function(message) {
             if (fifthResult === null) {
                 psReply = `Name      : ${psdata.ign} From ${realm.serverName}\n\nDate Of Account Creation: ${psdata.playerfinal.created}\nLast Played: ${LastPlayed}Ago`;
                 hasClan = false;
-            } else if (fifthResult.clan_id === null){
+            } else if (fifthResult.clan_id === null) {
                 psReply = `Name      : ${psdata.ign} From ${realm.serverName}\n\nDate Of Account Creation: ${psdata.playerfinal.created}\nLast Played: ${LastPlayed}Ago`;
                 hasClan = false;
             } else {
@@ -985,7 +992,7 @@ SerBot.on("message", async function(message) {
                         psdata.playerfinal.clan_role = 'Private';
                         break;
                 }
-                psdata.playerfinal.joined_clan = (now - new Date(psdata.joined_at/86400)).toFixed(0)
+                psdata.playerfinal.joined_clan = (now - new Date(psdata.joined_at / 86400)).toFixed(0)
             }
 
             //6th API Call
@@ -1001,46 +1008,47 @@ SerBot.on("message", async function(message) {
             message.channel.send(`\`\`\`\nSerBot Player Data Checking V 4.0\n===========================\n${psReply}\n===========================\nNote: If you don't see the embeded message with Player Statistics below this line, please Enable >Embed Links< Permission For SerBot!\`\`\``, {
                 embed: {
                     color: psdata.playerfinal.wn8.color,
-                    author: {name: 'SerBot Player Data Checking V 4.0 - By SerBot', icon_url: SerBot.user.avatarURL},
+                    author: { name: 'SerBot Player Data Checking V 4.0 - By SerBot', icon_url: SerBot.user.avatarURL },
                     title: `Embeded Reply of Player Statistics For ${psdata.ign}`,
                     description: 'Details of Player Statistics',
                     fields: [
-                        {name: `WN8`, value: `**${psdata.playerfinal.wn8.wn8.toFixed(0)} (${psdata.playerfinal.wn8.rating})**`, inline: true},
-                        {name: 'WN7', value: `**${psdata.playerfinal.wn7.wn7.toFixed(0)} (${psdata.playerfinal.wn7.rating})**`, inline: true},
-                        {name: `MGR 2.2`, value: `**[${psdata.playerfinal.MGR.MGR.toFixed(2)} (${psdata.playerfinal.MGR.rating})](http://forum.wotblitz.ru/index.php?/topic/37499-mgr-%D0%B2%D1%81%D1%82%D1%80%D0%B5%D1%87%D0%B0%D0%B5%D0%BC-%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8E-mgr-22/#topmost)**`, inline: true},
-                        {name: 'WG Personal Rating', value: `**${psdata.playerfinal.WGPR.toFixed(0)}**`},
-                        {name: 'Battles', value: `**${psdata.playerfinal.battles}**`, inline: true},
-                        {name: 'Winrate', value: `**${(psdata.playerfinal.wr * 100).toFixed(2)}%**`, inline: true},
-                        {name: 'Average Damage', value: `**${psdata.playerfinal.average_dmg.toFixed(0)}**`, inline: true},
-                        {name: 'Spots Per Game', value: `**${psdata.playerfinal.spots.toFixed(2)}**`, inline: true},
-                        {name: 'Kills Per Battle', value: `**${psdata.playerfinal.kpb.toFixed(2)}**`, inline: true},
-                        {name: 'Damage Ratio', value: `**${psdata.playerfinal.dmgratio.toFixed(2)}**`, inline: true},
-                        {name: 'Hit Ratio', value: `**${(psdata.playerfinal.hitrate * 100).toFixed(2)}%**`, inline: true},
-                        {name: 'Platooned Wins / Wins', value: `**${psdata.playerfinal.platooned_wins.toFixed(2)}%**`, inline: true},
-                        {name: 'Battles Per Day', value: `**${psdata.playerfinal.bpd.toFixed(0)}**`, inline: true},
-                        {name: 'Average Tier', value: `**${psdata.playerfinal.avgTier.toFixed(2)}**`, inline: true},
-                        {name: 'Survival Ratio', value: `**${(psdata.playerfinal.survive * 100).toFixed(2)}%**`, inline: true},
-                        {name: 'Win + Survived Ratio', value: `**${(psdata.playerfinal.win_and_survive * 100).toFixed(2)}%**`, inline: true},
-                        {name: 'Maximum Experience', value: `**${psdata.playerfinal.max_xp} on ${psdata.playerfinal.max_xp_tank}**`, inline: true},
-                        {name: 'Average Experience', value: `**${psdata.playerfinal.avgexp.toFixed(2)}**`, inline: true},
-                        {name: 'Cap Per battle', value: `**${psdata.playerfinal.cap.toFixed(2)}**`, inline: true},
-                        {name: 'Defend Per Battle', value: `**${psdata.playerfinal.defend.toFixed(2)}**`, inline: true},
-                        {name: 'Replays of this player', value: `[Link to this player's replays on WOTInspector.com](http://wotinspector.com/en/replays/sort/ut/?pl=${psdata.acc_id}#filters)`, inline: true}
+                        { name: `WN8`, value: `**${psdata.playerfinal.wn8.wn8.toFixed(0)} (${psdata.playerfinal.wn8.rating})**`, inline: true },
+                        { name: 'WN7', value: `**${psdata.playerfinal.wn7.wn7.toFixed(0)} (${psdata.playerfinal.wn7.rating})**`, inline: true },
+                        { name: `MGR 2.2`, value: `**[${psdata.playerfinal.MGR.MGR.toFixed(2)} (${psdata.playerfinal.MGR.rating})](http://forum.wotblitz.ru/index.php?/topic/37499-mgr-%D0%B2%D1%81%D1%82%D1%80%D0%B5%D1%87%D0%B0%D0%B5%D0%BC-%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8E-mgr-22/#topmost)**`, inline: true },
+                        { name: 'WG Personal Rating', value: `**${psdata.playerfinal.WGPR.toFixed(0)}**` },
+                        { name: 'Battles', value: `**${psdata.playerfinal.battles}**`, inline: true },
+                        { name: 'Winrate', value: `**${(psdata.playerfinal.wr * 100).toFixed(2)}%**`, inline: true },
+                        { name: 'Average Damage', value: `**${psdata.playerfinal.average_dmg.toFixed(0)}**`, inline: true },
+                        { name: 'Spots Per Game', value: `**${psdata.playerfinal.spots.toFixed(2)}**`, inline: true },
+                        { name: 'Kills Per Battle', value: `**${psdata.playerfinal.kpb.toFixed(2)}**`, inline: true },
+                        { name: 'Damage Ratio', value: `**${psdata.playerfinal.dmgratio.toFixed(2)}**`, inline: true },
+                        { name: 'Hit Ratio', value: `**${(psdata.playerfinal.hitrate * 100).toFixed(2)}%**`, inline: true },
+                        { name: 'Platooned Wins / Wins', value: `**${psdata.playerfinal.platooned_wins.toFixed(2)}%**`, inline: true },
+                        { name: 'Battles Per Day', value: `**${psdata.playerfinal.bpd.toFixed(0)}**`, inline: true },
+                        { name: 'Average Tier', value: `**${psdata.playerfinal.avgTier.toFixed(2)}**`, inline: true },
+                        { name: 'Survival Ratio', value: `**${(psdata.playerfinal.survive * 100).toFixed(2)}%**`, inline: true },
+                        { name: 'Win + Survived Ratio', value: `**${(psdata.playerfinal.win_and_survive * 100).toFixed(2)}%**`, inline: true },
+                        { name: 'Maximum Experience', value: `**${psdata.playerfinal.max_xp} on ${psdata.playerfinal.max_xp_tank}**`, inline: true },
+                        { name: 'Average Experience', value: `**${psdata.playerfinal.avgexp.toFixed(2)}**`, inline: true },
+                        { name: 'Cap Per battle', value: `**${psdata.playerfinal.cap.toFixed(2)}**`, inline: true },
+                        { name: 'Defend Per Battle', value: `**${psdata.playerfinal.defend.toFixed(2)}**`, inline: true },
+                        { name: 'Replays of this player', value: `[Link to this player's replays on WOTInspector.com](http://wotinspector.com/en/replays/sort/ut/?pl=${psdata.acc_id}#filters)`, inline: true }
                     ],
                     timestamp: new Date(psdata.playerfinal.last_battle_time),
-                    footer: {icon_url: SerBot.user.avatarURL, text: 'Detailed Time last played'}}
+                    footer: { icon_url: SerBot.user.avatarURL, text: 'Detailed Time last played' }
+                }
             });
 
-            if(rating){
+            if (rating) {
                 let ratingreq = JSON.parse(await request.Request(`${realm.portalPage}/${realm.mainLanguage}/api/rating-leaderboards/user/${psdata.acc_id}/?neighbors=0`));
-                if(ratingreq === undefined){
+                if (ratingreq === undefined) {
                     throw {
                         response: ratingreq,
                         error: SerBotDetails.ErrorArray.WG_api_Error
                     }
                 }
                 let norating = false;
-                switch (ratingreq.league_index){
+                switch (ratingreq.league_index) {
                     case 0:
                         psdata.playerfinal.league_name = 'Diamond League'; psdata.playerfinal.league_img = "a1.png"; psdata.playerfinal.league_color = 5910901; break;
                     case 1:
@@ -1054,26 +1062,27 @@ SerBot.on("message", async function(message) {
                     default:
                         norating = true; break;
                 }
-                if(norating){
+                if (norating) {
                     message.channel.send(`No Rating Battle Record has been found for this player.`)
                 } else {
-                    if(ratingreq.number !== null){
-                        psdata.playerfinal.league_ranking  = `${ratingreq.number} (Calibrated)`
+                    if (ratingreq.number !== null) {
+                        psdata.playerfinal.league_ranking = `${ratingreq.number} (Calibrated)`
                     } else {
-                        psdata.playerfinal.league_ranking  = `Calibration not completed, ${ratingreq.calibrationBattlesLeft} battles left`
+                        psdata.playerfinal.league_ranking = `Calibration not completed, ${ratingreq.calibrationBattlesLeft} battles left`
                     }
                     psdata.playerfinal.league_rating = ratingreq.score;
                     message.channel.send('', {
                         embed: {
                             color: psdata.playerfinal.league_color,
-                            author: {name: 'SerBot Player Data Checking Beta (Ratings Module)', icon_url: SerBot.user.avatarURL},
-                            thumbnail:{url: `http://static-wbp-sg.wgcdn.co/dcont/1.28.0/fb/image/${psdata.playerfinal.league_img}`},
-                            title: `Embeded Reply of Rating Statistics For ${psdata.ign} From ${realm.serverName}` ,
+                            author: { name: 'SerBot Player Data Checking Beta (Ratings Module)', icon_url: SerBot.user.avatarURL },
+                            thumbnail: { url: `http://static-wbp-sg.wgcdn.co/dcont/1.28.0/fb/image/${psdata.playerfinal.league_img}` },
+                            title: `Embeded Reply of Rating Statistics For ${psdata.ign} From ${realm.serverName}`,
                             fields: [
-                                {name: 'Player Rating', value: `**${psdata.playerfinal.league_rating} (${psdata.playerfinal.league_name})**`, inline: true},
-                                {name: 'Ranking', value: `**${psdata.playerfinal.league_ranking}**`, inline: true}
+                                { name: 'Player Rating', value: `**${psdata.playerfinal.league_rating} (${psdata.playerfinal.league_name})**`, inline: true },
+                                { name: 'Ranking', value: `**${psdata.playerfinal.league_ranking}**`, inline: true }
                             ],
-                            footer: {icon_url: SerBot.user.avatarURL, text: 'Provided by The Forever Loyal SerBot™'
+                            footer: {
+                                icon_url: SerBot.user.avatarURL, text: 'Provided by The Forever Loyal SerBot™'
                             }
                         }
                     });
@@ -1082,10 +1091,10 @@ SerBot.on("message", async function(message) {
 
 
             //debug command
-            if(debug){
+            if (debug) {
                 message.channel.send('Debugging Purposes Only File', {
-                    file:{
-                        attachment: Buffer.from(JSON.stringify(psdata,null,2),'utf8'),
+                    file: {
+                        attachment: Buffer.from(JSON.stringify(psdata, null, 2), 'utf8'),
                         name: 'debug.json'
                     }
                 })
@@ -1094,10 +1103,10 @@ SerBot.on("message", async function(message) {
             afterTypingCheck(message.channel);
         }
         catch (error) {
-            if (error.response !== undefined){
+            if (error.response !== undefined) {
                 errorReply(error.error, message, SerBotDetails.CommandArray.PSArray);
-                message.channel.send(`Returned API: \`\`\`json\n${JSON.stringify(error.response,null,2)}\`\`\``);
-                SerbLog(`Reply:\n${JSON.stringify(error.response,null,2)}`)
+                message.channel.send(`Returned API: \`\`\`json\n${JSON.stringify(error.response, null, 2)}\`\`\``);
+                SerbLog(`Reply:\n${JSON.stringify(error.response, null, 2)}`)
             } else if (error.sus === undefined) {
                 errorReply(SerBotDetails.ErrorArray.Unexpected_Error, message, SerBotDetails.CommandArray.PSArray);
                 message.channel.send(`Error Message: ${error}`);
@@ -1109,8 +1118,8 @@ SerBot.on("message", async function(message) {
     }
 
     //replays
-    if (commandAliasCheck(fullInput,SerBotDetails.CommandArray.ReplaysArray)){
-        try{
+    if (commandAliasCheck(fullInput, SerBotDetails.CommandArray.ReplaysArray)) {
+        try {
             let replayURLs = [];
             let title;
 
@@ -1122,7 +1131,7 @@ SerBot.on("message", async function(message) {
             //if the replay is in the message as url
             if (message.attachments.array()[0] === undefined) {
                 replayURLs[0] = fullInput[1];
-                if(fullInput[2] === undefined){
+                if (fullInput[2] === undefined) {
                     title = undefined
                 } else {
                     title = fullInput.slice(2).join(" ")
@@ -1131,7 +1140,7 @@ SerBot.on("message", async function(message) {
                 //if the replay is in the attachment
                 replayURLs = message.attachments.array().map(x => x.url)
                     .filter(x => x.endsWith("wotbreplay"));
-                if(fullInput[1] === undefined){
+                if (fullInput[1] === undefined) {
                     title = undefined
                 } else {
                     title = fullInput.slice(1).join(" ")
@@ -1140,14 +1149,14 @@ SerBot.on("message", async function(message) {
 
             console.log(replayURLs);
             //if the attachment is not a wotbreplay
-            if(replayURLs.length === 0){
+            if (replayURLs.length === 0) {
                 throw SerBotDetails.ErrorArray.Missing_Attachment_Replay;
             }
 
             //now wait for the reply
             message.channel.startTyping();
             replayURLs.map(async x => {
-                const reply = await replay.uploadReplay(SerBot.user.avatarURL,x,title);
+                const reply = await replay.uploadReplay(SerBot.user.avatarURL, x, title);
                 message.channel.send(reply.content, reply);
             });
 
@@ -1155,11 +1164,11 @@ SerBot.on("message", async function(message) {
             SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} Uploaded Replays.`);
 
             message.channel.stopTyping();
-        } catch (error){
-            if (error.response !== undefined){
+        } catch (error) {
+            if (error.response !== undefined) {
                 errorReply(error.error, message, SerBotDetails.CommandArray.ReplaysArray);
-                message.channel.send(`Returned API: \`\`\`json\n${JSON.stringify(error.response,null,2)}\`\`\``);
-                SerbLog(`Reply:\n${JSON.stringify(error.response,null,2)}`)
+                message.channel.send(`Returned API: \`\`\`json\n${JSON.stringify(error.response, null, 2)}\`\`\``);
+                SerbLog(`Reply:\n${JSON.stringify(error.response, null, 2)}`)
             } else if (error.sus === undefined) {
                 errorReply(SerBotDetails.ErrorArray.Unexpected_Error, message, SerBotDetails.CommandArray.ReplaysArray);
                 message.channel.send(`Error Message: ${error}`);
@@ -1169,30 +1178,32 @@ SerBot.on("message", async function(message) {
             }
         }
     } else {
-        try{
+        try {
             let replayURLs = [];
             let title = undefined;
-            if(message.attachments.array()[0] !== undefined){
+            if (message.attachments.array()[0] !== undefined) {
                 replayURLs = message.attachments.array().map(x => x.url)
                     .filter(x => x.endsWith('.wotbreplay'));
                 title = message.cleanContent;
-            } else if (fullInput[0].endsWith('.wotbreplay')){
+            } else if (fullInput[0].endsWith('.wotbreplay')) {
                 replayURLs[0] = fullInput[0];
                 title = fullInput.slice(1).join(" ");
             }
 
 
-            if(replayURLs.length !== 0 ){
+            if (replayURLs.length !== 0) {
                 message.channel.startTyping();
-                replayURLs.map(async x => {
-                    const reply = await replay.uploadReplay(SerBot.user.avatarURL,x,title);
-                    message.channel.send(reply.content, reply);
-                });
-                SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} Uploaded Replays via AUTOMATIC REPLAY DETECTION.`);
+                message.reply("PSA: Due to a technical issue while maintaining legacy SerBot code, Replay automatic detection is currently disabled until further notice. In the meantime, SerBot new version is currently in the works!")
+
+                // replayURLs.map(async x => {
+                //     const reply = await replay.uploadReplay(SerBot.user.avatarURL,x,title);
+                //     message.channel.send(reply.content, reply);
+                // });
+                // SerbLog(`The User ${message.author.username} From ${message.guild} at Channel #${message.channel.name} Uploaded Replays via AUTOMATIC REPLAY DETECTION.`);
 
                 message.channel.stopTyping();
             }
-        } catch (error){
+        } catch (error) {
             errorReply(SerBotDetails.ErrorArray.Unexpected_Error, message, SerBotDetails.CommandArray.ReplaysArray);
             message.channel.send(`Error Message: ${error}`);
             SerbLog(`Unexpected Error: ${error}`)
